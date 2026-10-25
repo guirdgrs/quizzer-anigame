@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { database } from './firebase';
-import { ref, onValue, set, push, remove } from 'firebase/database';
+import { database } from "./firebase";
+import { ref, onValue, set, push, remove } from "firebase/database";
 import {
   Trophy,
   Users,
@@ -36,38 +36,6 @@ import {
   UserPlus,
 } from "lucide-react";
 
-// --- CONFIGURAÇÃO E INICIALIZAÇÃO DO FIREBASE (OPCIONAL) ---
-import { initializeApp } from "firebase/app";
-import {
-  getAuth,
-  signInAnonymously,
-  signInWithCustomToken,
-  onAuthStateChanged,
-} from "firebase/auth";
-import {
-  getFirestore,
-  doc,
-  setDoc,
-  getDoc,
-  onSnapshot,
-} from "firebase/firestore";
-
-let auth = null;
-let db = null;
-let appId = "anime-quiz-studio";
-
-try {
-  if (typeof __firebase_config !== "undefined" && __firebase_config) {
-    const firebaseConfig = JSON.parse(__firebase_config);
-    const app = initializeApp(firebaseConfig);
-    auth = getAuth(app);
-    db = getFirestore(app);
-    if (typeof __app_id !== "undefined") appId = __app_id;
-  }
-} catch (err) {
-  console.log("Modo offline/local ativo");
-}
-
 // --- GERADORES DE EFEITOS SONOROS (WEB AUDIO API) ---
 const playSound = (type) => {
   try {
@@ -87,9 +55,9 @@ const playSound = (type) => {
       osc.stop(ctx.currentTime + 0.3);
     } else if (type === "correct") {
       osc.type = "sine";
-      osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
-      osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1); // E5
-      osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2); // G5
+      osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+      osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1);
+      osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2);
       gain.gain.setValueAtTime(0.2, ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.45);
       osc.connect(gain);
@@ -119,7 +87,6 @@ const NarutoPaintSVG = () => (
     className="w-full h-full max-h-[300px] object-contain mx-auto"
   >
     <rect width="400" height="400" fill="#ffffff" />
-    {/* Cabelo Amarelo Espetado */}
     <path
       d="M110 180 L130 90 L160 140 L190 70 L220 130 L250 80 L280 140 L310 90 L300 190 Z"
       fill="#FFE600"
@@ -127,7 +94,6 @@ const NarutoPaintSVG = () => (
       strokeWidth="5"
       strokeLinejoin="round"
     />
-    {/* Rosto */}
     <ellipse
       cx="205"
       cy="220"
@@ -137,14 +103,12 @@ const NarutoPaintSVG = () => (
       stroke="#000000"
       strokeWidth="5"
     />
-    {/* Bandana Azul */}
     <path
       d="M135 180 Q205 170 275 180 L275 205 Q205 195 135 205 Z"
       fill="#1D4ED8"
       stroke="#000000"
       strokeWidth="4"
     />
-    {/* Placa de Metal */}
     <rect
       x="175"
       y="183"
@@ -155,14 +119,12 @@ const NarutoPaintSVG = () => (
       stroke="#000000"
       strokeWidth="3"
     />
-    {/* Símbolo da Folha */}
     <path
       d="M200 188 Q210 190 205 196 Q195 194 200 188"
       fill="none"
       stroke="#000000"
       strokeWidth="3"
     />
-    {/* Olhos Azuis */}
     <ellipse
       cx="175"
       cy="225"
@@ -183,7 +145,6 @@ const NarutoPaintSVG = () => (
     />
     <circle cx="175" cy="225" r="4" fill="#000000" />
     <circle cx="235" cy="225" r="4" fill="#000000" />
-    {/* Sobrancelhas Amarelas */}
     <path
       d="M160 210 L190 215"
       stroke="#FFE600"
@@ -196,7 +157,6 @@ const NarutoPaintSVG = () => (
       strokeWidth="6"
       strokeLinecap="round"
     />
-    {/* Sorriso Riscado */}
     <path
       d="M180 255 Q205 270 230 255"
       fill="none"
@@ -204,56 +164,12 @@ const NarutoPaintSVG = () => (
       strokeWidth="4"
       strokeLinecap="round"
     />
-    {/* Bigodes / Marcas da Raposa */}
-    <line
-      x1="145"
-      y1="225"
-      x2="162"
-      y2="228"
-      stroke="#000000"
-      strokeWidth="3"
-    />
-    <line
-      x1="143"
-      y1="235"
-      x2="160"
-      y2="236"
-      stroke="#000000"
-      strokeWidth="3"
-    />
-    <line
-      x1="146"
-      y1="245"
-      x2="163"
-      y2="242"
-      stroke="#000000"
-      strokeWidth="3"
-    />
-    <line
-      x1="248"
-      y1="228"
-      x2="265"
-      y2="225"
-      stroke="#000000"
-      strokeWidth="3"
-    />
-    <line
-      x1="250"
-      y1="236"
-      x2="267"
-      y2="235"
-      stroke="#000000"
-      strokeWidth="3"
-    />
-    <line
-      x1="247"
-      y1="242"
-      x2="264"
-      y2="245"
-      stroke="#000000"
-      strokeWidth="3"
-    />
-    {/* Roupa Laranja e Azul */}
+    <line x1="145" y1="225" x2="162" y2="228" stroke="#000000" strokeWidth="3" />
+    <line x1="143" y1="235" x2="160" y2="236" stroke="#000000" strokeWidth="3" />
+    <line x1="146" y1="245" x2="163" y2="242" stroke="#000000" strokeWidth="3" />
+    <line x1="248" y1="228" x2="265" y2="225" stroke="#000000" strokeWidth="3" />
+    <line x1="250" y1="236" x2="267" y2="235" stroke="#000000" strokeWidth="3" />
+    <line x1="247" y1="242" x2="264" y2="245" stroke="#000000" strokeWidth="3" />
     <path
       d="M140 280 L120 370 L290 370 L270 280 Q205 310 140 280 Z"
       fill="#1E40AF"
@@ -269,7 +185,7 @@ const NarutoPaintSVG = () => (
   </svg>
 );
 
-// --- DADOS INICIAIS DO QUIZ (PADRÃO DAS SUAS IMAGENS DO CANVA) ---
+// --- DADOS INICIAIS DO QUIZ ---
 const INITIAL_QUIZ_DATA = {
   title: "Animes",
   categories: [
@@ -550,7 +466,6 @@ const INITIAL_QUIZ_DATA = {
   ],
 };
 
-// BANCO DE EVENTOS ALEATÓRIOS
 const RANDOM_EVENTS = [
   {
     type: "gartic",
@@ -578,13 +493,12 @@ const RANDOM_EVENTS = [
 export default function App() {
   // ESTADOS DO JOGO
   const [role, setRole] = useState("host"); // 'host' (ADM) ou 'player'
-  const [user, setUser] = useState(null);
   const [quizData, setQuizData] = useState(INITIAL_QUIZ_DATA);
   const [hoveredCategory, setHoveredCategory] = useState(null);
 
   // NAVEGAÇÃO
-  const [currentTab, setCurrentTab] = useState("board"); // 'board', 'question', 'editor', 'minigames', 'players'
-  const [selectedQuestion, setSelectedQuestion] = useState(null); // { category, question }
+  const [currentTab, setCurrentTab] = useState("board");
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
 
   // ESTADO DA PARTIDA
   const [players, setPlayers] = useState([
@@ -594,112 +508,180 @@ export default function App() {
   ]);
   const [newPlayerName, setNewPlayerName] = useState("");
   const [activePlayerId, setActivePlayerId] = useState("p1");
-  const [completedQuestions, setCompletedQuestions] = useState({}); // key: "categoryId-level"
+  const [completedQuestions, setCompletedQuestions] = useState({});
 
-  // MINIGAMES / EVENTO SORTEADO
+  // MINIGAMES
   const [activeEvent, setActiveEvent] = useState(null);
 
   // ESTADO DO BUZZER E RESPOSTAS
-  const [buzzerQueue, setBuzzerQueue] = useState([]); // [{ playerId, time, name }]
+  const [buzzerQueue, setBuzzerQueue] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false);
   const audioRef = useRef(null);
 
-// 1. Escuta em tempo real a fila de Buzz do Firebase
+  // =========================================================
+  // 📡 CONEXÃO EM TEMPO REAL COM FIREBASE (SINCRONIZAÇÃO TOTAL)
+  // =========================================================
+
+  // 1. ESCUTAR A FILA DE BUZZ EM TEMPO REAL
   useEffect(() => {
-    const buzzRef = ref(database, 'game/buzzQueue');
+    if (!database) return;
+    const buzzRef = ref(database, "game/buzzQueue");
     const unsubscribe = onValue(buzzRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        // Converte os dados do Firebase em lista e ordena por quem apertou primeiro
-        const list = Object.entries(data).map(([key, value]) => ({
-          id: key,
-          ...value,
-        })).sort((a, b) => a.timestamp - b.timestamp);
+        const list = Object.entries(data)
+          .map(([key, value]) => ({
+            id: key,
+            ...value,
+          }))
+          .sort((a, b) => a.timestamp - b.timestamp);
 
-        setBuzzQueue(list);
+        setBuzzerQueue(list);
       } else {
-        setBuzzQueue([]);
+        setBuzzerQueue([]);
       }
     });
 
     return () => unsubscribe();
   }, []);
 
-  // 2. Quando o Jogador clica no Botão de Buzz
-  const handleBuzz = (playerName) => {
-    const buzzRef = ref(database, 'game/buzzQueue');
-    push(buzzRef, {
-      name: playerName || 'Jogador Anônimo',
-      timestamp: Date.now()
+  // 2. ESCUTAR ESTADO DO JOGO EM TEMPO REAL (PERGUNTA ATIVA, PLACAR, TABULEIRO)
+  useEffect(() => {
+    if (!database) return;
+    const stateRef = ref(database, "game/state");
+    const unsubscribe = onValue(stateRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        if (data.currentTab !== undefined) setCurrentTab(data.currentTab);
+        if (data.selectedQuestion !== undefined)
+          setSelectedQuestion(data.selectedQuestion);
+        if (data.showAnswer !== undefined) setShowAnswer(data.showAnswer);
+        if (data.completedQuestions !== undefined)
+          setCompletedQuestions(data.completedQuestions);
+        if (data.players !== undefined) setPlayers(data.players);
+        if (data.quizData !== undefined) setQuizData(data.quizData);
+      }
     });
-  };
 
-  // 3. Quando o Host clica em "Limpar Fila" ou avança a pergunta
-  const handleClearBuzz = () => {
-    const buzzRef = ref(database, 'game/buzzQueue');
-    remove(buzzRef);
-  };
+    return () => unsubscribe();
+  }, []);
 
-  // --- LÓGICA DE JOGO ---
-  const handleSelectQuestion = (category, question) => {
-    // Jogadores em modo player só podem dar hover, Host seleciona a pergunta
-    if (role === "player") return;
-    setSelectedQuestion({ category, question });
-    setShowAnswer(false);
-    setBuzzerQueue([]);
-    setCurrentTab("question");
-  };
-
+  // 3. ENVIAR BUZZ PARA O FIREBASE
   const handleBuzzerClick = (pId) => {
     const playerObj = players.find((p) => p.id === pId);
     if (!playerObj) return;
 
-    // Verificar se jogador já está na fila
     if (buzzerQueue.some((item) => item.playerId === pId)) return;
 
     playSound("buzzer");
-    const newEntry = {
-      playerId: pId,
-      name: playerObj.name,
-      timestamp:
-        new Date().toLocaleTimeString("pt-BR", { hour12: false }) +
-        "." +
-        Math.floor(Math.random() * 900 + 100),
-    };
-    setBuzzerQueue((prev) => [...prev, newEntry]);
+
+    if (database) {
+      const buzzRef = ref(database, "game/buzzQueue");
+      push(buzzRef, {
+        playerId: pId,
+        name: playerObj.name,
+        timestamp: Date.now(),
+        formattedTime:
+          new Date().toLocaleTimeString("pt-BR", { hour12: false }) +
+          "." +
+          Math.floor(Math.random() * 900 + 100),
+      });
+    } else {
+      setBuzzerQueue((prev) => [
+        ...prev,
+        {
+          id: "local_" + Date.now(),
+          playerId: pId,
+          name: playerObj.name,
+          timestamp: Date.now(),
+          formattedTime: new Date().toLocaleTimeString("pt-BR"),
+        },
+      ]);
+    }
   };
 
+  // 4. LIMPAR FILA DE BUZZ NO FIREBASE
+  const handleClearBuzz = () => {
+    setBuzzerQueue([]);
+    if (database) {
+      const buzzRef = ref(database, "game/buzzQueue");
+      remove(buzzRef);
+    }
+  };
+
+  // 5. SELECIONAR PERGUNTA (HOST ATUALIZA TODAS AS TELAS)
+  const handleSelectQuestion = (category, question) => {
+    if (role === "player") return;
+    const newQuestionState = { category, question };
+    setSelectedQuestion(newQuestionState);
+    setShowAnswer(false);
+    handleClearBuzz();
+    setCurrentTab("question");
+
+    if (database) {
+      set(ref(database, "game/state/selectedQuestion"), newQuestionState);
+      set(ref(database, "game/state/showAnswer"), false);
+      set(ref(database, "game/state/currentTab"), "question");
+    }
+  };
+
+  // 6. ALTERAR TABULADOR / ABAS
+  const handleTabChange = (tab) => {
+    setCurrentTab(tab);
+    if (role === "host" && database) {
+      set(ref(database, "game/state/currentTab"), tab);
+    }
+  };
+
+  // 7. ATRIBUIR PONTUAÇÃO (ACERTO / ERRO)
   const handleScoreAward = (isCorrect) => {
     if (!selectedQuestion || buzzerQueue.length === 0) return;
 
     const currentBuzz = buzzerQueue[0];
     const points = selectedQuestion.question.value;
 
+    let updatedPlayers = [...players];
+
     if (isCorrect) {
       playSound("correct");
-      // Adiciona pontos ao jogador da vez
-      setPlayers((prev) =>
-        prev.map((p) =>
-          p.id === currentBuzz.playerId ? { ...p, score: p.score + points } : p,
-        ),
+      updatedPlayers = updatedPlayers.map((p) =>
+        p.id === currentBuzz.playerId ? { ...p, score: p.score + points } : p,
       );
-      // Marcar pergunta como concluída no tabuleiro
       const key = `${selectedQuestion.category.id}-${selectedQuestion.question.level}`;
-      setCompletedQuestions((prev) => ({ ...prev, [key]: true }));
-      // Mostrar resposta
+      const updatedCompleted = { ...completedQuestions, [key]: true };
+
+      setPlayers(updatedPlayers);
+      setCompletedQuestions(updatedCompleted);
       setShowAnswer(true);
+
+      if (database) {
+        set(ref(database, "game/state/players"), updatedPlayers);
+        set(ref(database, "game/state/completedQuestions"), updatedCompleted);
+        set(ref(database, "game/state/showAnswer"), true);
+      }
     } else {
       playSound("wrong");
-      // Subtrai penalidade (metade dos pontos)
-      setPlayers((prev) =>
-        prev.map((p) =>
-          p.id === currentBuzz.playerId
-            ? { ...p, score: Math.max(0, p.score - Math.floor(points / 2)) }
-            : p,
-        ),
+      updatedPlayers = updatedPlayers.map((p) =>
+        p.id === currentBuzz.playerId
+          ? { ...p, score: Math.max(0, p.score - Math.floor(points / 2)) }
+          : p,
       );
-      // Remove o primeiro da fila para que o próximo possa responder
-      setBuzzerQueue((prev) => prev.slice(1));
+      setPlayers(updatedPlayers);
+
+      if (database) {
+        set(ref(database, "game/state/players"), updatedPlayers);
+        if (currentBuzz.id) {
+          remove(ref(database, `game/buzzQueue/${currentBuzz.id}`));
+        }
+      }
+    }
+  };
+
+  // 8. SALVAR EDIÇÃO DO QUIZ
+  const saveQuizDataLocally = (newQuizData) => {
+    setQuizData(newQuizData);
+    if (database) {
+      set(ref(database, "game/state/quizData"), newQuizData);
     }
   };
 
@@ -719,26 +701,29 @@ export default function App() {
       score: 0,
       color: colors[players.length % colors.length],
     };
-    setPlayers((prev) => [...prev, newP]);
+    const updated = [...players, newP];
+    setPlayers(updated);
     setNewPlayerName("");
+    if (database) set(ref(database, "game/state/players"), updated);
   };
 
   const handleRemovePlayer = (id) => {
-    setPlayers((prev) => prev.filter((p) => p.id !== id));
+    const updated = players.filter((p) => p.id !== id);
+    setPlayers(updated);
+    if (database) set(ref(database, "game/state/players"), updated);
   };
 
   const handleUpdateScore = (id, delta) => {
-    setPlayers((prev) =>
-      prev.map((p) =>
-        p.id === id ? { ...p, score: Math.max(0, p.score + delta) } : p,
-      ),
+    const updated = players.map((p) =>
+      p.id === id ? { ...p, score: Math.max(0, p.score + delta) } : p,
     );
+    setPlayers(updated);
+    if (database) set(ref(database, "game/state/players"), updated);
   };
 
-  // --- RENDERIZAR TELA PRINCIPAL (TABULEIRO DA IMAGEM 1 DO CANVA) ---
+  // --- RENDERIZAR TABULEIRO ---
   const renderBoardView = () => (
     <div className="w-full max-w-6xl mx-auto my-4 p-4 sm:p-8 rounded-3xl bg-white/70 backdrop-blur-xl border border-white/80 shadow-2xl transition-all">
-      {/* TÍTULO CENTRALIZADO ESTILO CANVA */}
       <div className="text-center mb-8">
         <h1 className="text-4xl sm:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 drop-shadow-sm tracking-wide">
           {quizData.title || "Animes"}
@@ -750,9 +735,7 @@ export default function App() {
         </p>
       </div>
 
-      {/* GRADE DO TABULEIRO: CATEGORIAS NA ESQUERDA, VALORES NA DIREITA */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
-        {/* COLUNA DA ESQUERDA: CATEGORIAS */}
         <div className="md:col-span-4 space-y-4">
           <div className="text-xs font-black text-red-500 tracking-wider uppercase px-2">
             CATEGORIAS
@@ -768,7 +751,6 @@ export default function App() {
                 {cat.name}
               </div>
 
-              {/* TOOLTIP DE DESCRIÇÃO AO PASSAR O MOUSE (ESTILO CANVA) */}
               {hoveredCategory?.id === cat.id && (
                 <div className="absolute left-0 right-0 z-30 mt-2 p-4 rounded-2xl bg-slate-900/95 backdrop-blur-md text-white text-xs sm:text-sm shadow-2xl border border-slate-700 animate-fadeIn">
                   <div className="font-bold text-blue-400 mb-1 flex items-center gap-1.5">
@@ -781,7 +763,6 @@ export default function App() {
           ))}
         </div>
 
-        {/* COLUNA DA DIREITA: VALORES DE 1 A 6 */}
         <div className="md:col-span-8 space-y-4">
           <div className="text-xs font-black text-red-500 tracking-wider uppercase px-2 flex justify-between">
             <span>VALORES (NÃO DIFICULDADE)</span>
@@ -824,42 +805,35 @@ export default function App() {
     </div>
   );
 
-  // --- RENDERIZAR TELA DA PERGUNTA (IMAGEM 2 DO CANVA - NARUTO PAINT) ---
+  // --- RENDERIZAR TELA DA PERGUNTA ---
   const renderQuestionView = () => {
     if (!selectedQuestion) return null;
     const { category, question } = selectedQuestion;
 
     return (
       <div className="w-full max-w-5xl mx-auto my-4 p-4 sm:p-8 rounded-3xl bg-white/75 backdrop-blur-xl border border-white/90 shadow-2xl relative transition-all">
-        {/* CABEÇALHO DA PERGUNTA */}
         <div className="flex items-center justify-between mb-6">
-          {/* BOTÃO TABULEIRO (CANTO SUPERIOR ESQUERDO DA IMAGEM DO CANVA) */}
           <button
-            onClick={() => setCurrentTab("board")}
-            className="px-5 py-2.5 rounded-full bg-blue-500 hover:bg-blue-600 active:scale-95 text-white font-bold text-sm sm:text-base shadow-md transition-all flex items-center gap-2"
+            onClick={() => handleTabChange("board")}
+            className="px-5 py-2.5 rounded-full bg-blue-500 hover:bg-blue-600 active:scale-95 text-white font-bold text-sm sm:text-base shadow-md transition-all flex items-center gap-2 cursor-pointer"
           >
             <ArrowLeft className="w-5 h-5" /> Tabuleiro
           </button>
 
-          {/* NOME DA CATEGORIA NO CENTRO */}
           <h2 className="text-3xl sm:text-5xl font-black text-slate-800 text-center tracking-wide">
             {category.name}
           </h2>
 
-          {/* BUMPER DO NÍVEL DO CARD (CANTO SUPERIOR DIREITO) */}
           <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-blue-500 text-white font-black text-2xl flex items-center justify-center shadow-lg border-2 border-white">
             {question.level}
           </div>
         </div>
 
-        {/* ÁREA CENTRAL DE CONTEÚDO DA PERGUNTA */}
         <div className="bg-white/90 rounded-2xl p-6 shadow-inner border border-slate-200 min-h-[320px] flex flex-col items-center justify-center my-4 relative overflow-hidden">
-          {/* ENUNCIADO EM TEXTO */}
           <p className="text-xl sm:text-2xl font-bold text-slate-800 text-center mb-4">
             {question.content}
           </p>
 
-          {/* TIPO: IMAGEM (SVG MOCKUP DO NARUTO OU URL ENVIADA) */}
           {question.type === "image" && (
             <div className="w-full max-w-md my-2 rounded-xl overflow-hidden border-2 border-slate-300 shadow-md bg-white p-2">
               {question.isCustomSvg ? (
@@ -877,7 +851,6 @@ export default function App() {
             </div>
           )}
 
-          {/* TIPO: ÁUDIO */}
           {question.type === "audio" && (
             <div className="my-6 p-6 rounded-2xl bg-blue-50 border-2 border-blue-200 flex flex-col items-center gap-3 w-full max-w-md">
               <Volume2 className="w-12 h-12 text-blue-600 animate-pulse" />
@@ -896,7 +869,6 @@ export default function App() {
             </div>
           )}
 
-          {/* RESPOSTA REVELADA */}
           {showAnswer && (
             <div className="mt-4 p-4 rounded-xl bg-emerald-100 border-2 border-emerald-400 text-emerald-900 text-center w-full max-w-lg animate-fadeIn">
               <span className="text-xs font-black uppercase text-emerald-600 block">
@@ -907,22 +879,19 @@ export default function App() {
           )}
         </div>
 
-        {/* RODAPÉ E CONTROLES */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 pt-4 border-t border-slate-200">
-          {/* BOTÃO VERDE "RESPOSTA" (CANTO INFERIOR ESQUERDO DO CANVA) */}
           <button
-            onClick={() => setShowAnswer(!showAnswer)}
-            className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-lg shadow-lg hover:shadow-emerald-200 transition-all flex items-center justify-center gap-2"
+            onClick={() => {
+              const nextVal = !showAnswer;
+              setShowAnswer(nextVal);
+              if (database) set(ref(database, "game/state/showAnswer"), nextVal);
+            }}
+            className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-lg shadow-lg hover:shadow-emerald-200 transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
-            {showAnswer ? (
-              <EyeOff className="w-5 h-5" />
-            ) : (
-              <Eye className="w-5 h-5" />
-            )}
+            {showAnswer ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
             {showAnswer ? "Ocultar Resposta" : "Resposta"}
           </button>
 
-          {/* PONTUAÇÃO EM JOGO */}
           <div className="text-sm font-bold text-slate-500 bg-slate-100 px-4 py-2 rounded-full border border-slate-300">
             Valendo:{" "}
             <span className="text-blue-600 font-extrabold text-base">
@@ -931,7 +900,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* SEÇÃO DO BUZZER E PAINEL DA GALERA */}
+        {/* PAINEL DO BUZZER */}
         <div className="mt-8 p-6 rounded-2xl bg-slate-900 text-white shadow-2xl">
           <div className="flex items-center justify-between mb-4 pb-2 border-b border-slate-800">
             <h3 className="text-lg font-bold flex items-center gap-2">
@@ -940,8 +909,8 @@ export default function App() {
             </h3>
             {role === "host" && (
               <button
-                onClick={() => setBuzzerQueue([])}
-                className="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg text-slate-300 hover:text-white transition-all flex items-center gap-1"
+                onClick={handleClearBuzz}
+                className="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg text-slate-300 hover:text-white transition-all flex items-center gap-1 cursor-pointer"
               >
                 <RotateCcw className="w-3.5 h-3.5" /> Limpar Fila
               </button>
@@ -949,7 +918,7 @@ export default function App() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-            {/* BOTÃO BUZZER */}
+            {/* BOTÃO DE BUZZ */}
             <div className="flex flex-col items-center justify-center p-4">
               <button
                 onClick={() => handleBuzzerClick(activePlayerId)}
@@ -967,7 +936,7 @@ export default function App() {
               </p>
             </div>
 
-            {/* FILA DE QUEM APERTOU O BUZZER */}
+            {/* FILA DE RESPOSTA */}
             <div className="bg-slate-800/80 rounded-xl p-4 border border-slate-700">
               <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
                 Fila de Resposta ({buzzerQueue.length})
@@ -981,7 +950,7 @@ export default function App() {
                 <div className="space-y-2">
                   {buzzerQueue.map((item, index) => (
                     <div
-                      key={item.playerId + index}
+                      key={item.id || index}
                       className={`p-3 rounded-lg flex items-center justify-between border ${
                         index === 0
                           ? "bg-amber-500/20 border-amber-500/50 text-amber-200 font-bold"
@@ -990,21 +959,24 @@ export default function App() {
                     >
                       <div className="flex items-center gap-3">
                         <span
-                          className={`w-6 h-6 rounded-full text-xs flex items-center justify-center font-bold ${index === 0 ? "bg-amber-500 text-slate-950" : "bg-slate-600 text-white"}`}
+                          className={`w-6 h-6 rounded-full text-xs flex items-center justify-center font-bold ${
+                            index === 0
+                              ? "bg-amber-500 text-slate-950"
+                              : "bg-slate-600 text-white"
+                          }`}
                         >
                           {index + 1}º
                         </span>
                         <span>{item.name}</span>
                       </div>
                       <span className="text-xs font-mono text-slate-400">
-                        {item.timestamp}
+                        {item.formattedTime || "00:00"}
                       </span>
                     </div>
                   ))}
                 </div>
               )}
 
-              {/* CONTROLES DO HOST PARA APRECIAÇÃO DA RESPOSTA */}
               {role === "host" && buzzerQueue.length > 0 && (
                 <div className="mt-4 pt-3 border-t border-slate-700 flex gap-2">
                   <button
@@ -1039,8 +1011,7 @@ export default function App() {
             Dashboard de Criação (No-Code)
           </h2>
           <p className="text-sm text-slate-500">
-            Crie, altere e personalize as categorias e perguntas para você e
-            seus amigos jogarem!
+            Crie, altere e personalize as categorias e perguntas!
           </p>
         </div>
 
@@ -1059,13 +1030,12 @@ export default function App() {
             downloadAnchor.click();
             downloadAnchor.remove();
           }}
-          className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold transition-all flex items-center gap-1.5 shadow"
+          className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold transition-all flex items-center gap-1.5 shadow cursor-pointer"
         >
           <Download className="w-4 h-4" /> Baixar Quiz (JSON)
         </button>
       </div>
 
-      {/* TÍTULO DO QUIZ */}
       <div className="mb-6 p-4 rounded-2xl bg-blue-50 border border-blue-200">
         <label className="block text-xs font-bold text-blue-900 uppercase mb-1">
           Título do Jogo
@@ -1080,7 +1050,6 @@ export default function App() {
         />
       </div>
 
-      {/* LISTA DE CATEGORIAS */}
       <div className="space-y-6">
         {quizData.categories.map((cat, cIdx) => (
           <div
@@ -1121,7 +1090,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* PERGUNTAS */}
             <div className="space-y-3 mt-4 pt-3 border-t border-slate-200">
               <h4 className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">
                 Perguntas e Respostas ({cat.questions.length})
@@ -1183,7 +1151,7 @@ export default function App() {
     </div>
   );
 
-  // --- RENDERIZAR GERENCIADOR DE JOGADORES DO HOST ---
+  // --- RENDERIZAR GERENCIADOR DE JOGADORES ---
   const renderPlayersView = () => (
     <div className="w-full max-w-4xl mx-auto my-4 p-6 sm:p-8 rounded-3xl bg-white/80 backdrop-blur-xl border border-white shadow-2xl">
       <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-200">
@@ -1198,7 +1166,6 @@ export default function App() {
         </div>
       </div>
 
-      {/* FORMULÁRIO DE ADICIONAR */}
       <div className="flex gap-2 mb-6">
         <input
           type="text"
@@ -1209,13 +1176,12 @@ export default function App() {
         />
         <button
           onClick={handleAddPlayer}
-          className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-sm shadow transition-all flex items-center gap-1.5"
+          className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-sm shadow transition-all flex items-center gap-1.5 cursor-pointer"
         >
           <UserPlus className="w-4 h-4" /> Adicionar
         </button>
       </div>
 
-      {/* LISTA DE JOGADORES */}
       <div className="space-y-3">
         {players.map((p) => (
           <div
@@ -1233,7 +1199,7 @@ export default function App() {
               <div className="flex items-center gap-1 bg-white px-3 py-1 rounded-xl border border-slate-300">
                 <button
                   onClick={() => handleUpdateScore(p.id, -50)}
-                  className="px-2 py-0.5 text-xs font-black text-red-500 hover:bg-red-50 rounded"
+                  className="px-2 py-0.5 text-xs font-black text-red-500 hover:bg-red-50 rounded cursor-pointer"
                 >
                   -50
                 </button>
@@ -1242,7 +1208,7 @@ export default function App() {
                 </span>
                 <button
                   onClick={() => handleUpdateScore(p.id, 50)}
-                  className="px-2 py-0.5 text-xs font-black text-emerald-600 hover:bg-emerald-50 rounded"
+                  className="px-2 py-0.5 text-xs font-black text-emerald-600 hover:bg-emerald-50 rounded cursor-pointer"
                 >
                   +50
                 </button>
@@ -1250,7 +1216,7 @@ export default function App() {
 
               <button
                 onClick={() => handleRemovePlayer(p.id)}
-                className="p-2 text-rose-500 hover:bg-rose-100 rounded-xl transition-all"
+                className="p-2 text-rose-500 hover:bg-rose-100 rounded-xl transition-all cursor-pointer"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
@@ -1261,7 +1227,7 @@ export default function App() {
     </div>
   );
 
-  // --- RENDERIZAR MINIGAMES & EVENTOS ALEATÓRIOS ---
+  // --- RENDERIZAR MINIGAMES ---
   const renderMinigamesView = () => (
     <div className="w-full max-w-4xl mx-auto my-4 p-6 sm:p-8 rounded-3xl bg-white/80 backdrop-blur-xl border border-white shadow-2xl text-center">
       <Sparkles className="w-12 h-12 text-amber-500 mx-auto mb-3 animate-spin" />
@@ -1273,7 +1239,6 @@ export default function App() {
         Gartic, Stop e Bônus!
       </p>
 
-      {/* BOTÃO ROLETA */}
       <button
         onClick={() => {
           const randomEv =
@@ -1324,9 +1289,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-300 via-indigo-200 to-purple-300 font-sans text-slate-800 p-3 sm:p-6 select-none relative overflow-x-hidden">
-      {/* BARRA SUPERIOR DE NAVEGAÇÃO E MODO DUPLO */}
       <header className="w-full max-w-6xl mx-auto mb-4 bg-slate-900/90 backdrop-blur-md rounded-2xl p-3 sm:p-4 text-white shadow-2xl flex flex-wrap items-center justify-between gap-4 border border-slate-700">
-        {/* LOGO */}
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-xl bg-blue-600 text-white">
             <Tv className="w-6 h-6" />
@@ -1341,56 +1304,77 @@ export default function App() {
           </div>
         </div>
 
-        {/* NAVEGAÇÃO DE ABAS */}
         <div className="flex items-center gap-1 bg-slate-800 p-1 rounded-xl text-xs font-bold">
           <button
-            onClick={() => setCurrentTab("board")}
-            className={`px-3 py-2 rounded-lg transition-all ${currentTab === "board" ? "bg-blue-600 text-white shadow" : "text-slate-400 hover:text-white"}`}
+            onClick={() => handleTabChange("board")}
+            className={`px-3 py-2 rounded-lg transition-all cursor-pointer ${
+              currentTab === "board"
+                ? "bg-blue-600 text-white shadow"
+                : "text-slate-400 hover:text-white"
+            }`}
           >
             Tabuleiro
           </button>
           <button
-            onClick={() => setCurrentTab("editor")}
-            className={`px-3 py-2 rounded-lg transition-all ${currentTab === "editor" ? "bg-blue-600 text-white shadow" : "text-slate-400 hover:text-white"}`}
+            onClick={() => handleTabChange("editor")}
+            className={`px-3 py-2 rounded-lg transition-all cursor-pointer ${
+              currentTab === "editor"
+                ? "bg-blue-600 text-white shadow"
+                : "text-slate-400 hover:text-white"
+            }`}
           >
             Editor ADM
           </button>
           <button
-            onClick={() => setCurrentTab("players")}
-            className={`px-3 py-2 rounded-lg transition-all ${currentTab === "players" ? "bg-blue-600 text-white shadow" : "text-slate-400 hover:text-white"}`}
+            onClick={() => handleTabChange("players")}
+            className={`px-3 py-2 rounded-lg transition-all cursor-pointer ${
+              currentTab === "players"
+                ? "bg-blue-600 text-white shadow"
+                : "text-slate-400 hover:text-white"
+            }`}
           >
             Jogadores
           </button>
           <button
-            onClick={() => setCurrentTab("minigames")}
-            className={`px-3 py-2 rounded-lg transition-all ${currentTab === "minigames" ? "bg-blue-600 text-white shadow" : "text-slate-400 hover:text-white"}`}
+            onClick={() => handleTabChange("minigames")}
+            className={`px-3 py-2 rounded-lg transition-all cursor-pointer ${
+              currentTab === "minigames"
+                ? "bg-blue-600 text-white shadow"
+                : "text-slate-400 hover:text-white"
+            }`}
           >
             Minigames
           </button>
         </div>
 
-        {/* SELECTOR DE PAPEL (HOST vs JOGADOR) */}
         <div className="flex items-center gap-2">
           <div className="flex items-center bg-slate-800 rounded-xl p-1 text-xs">
             <button
               onClick={() => setRole("host")}
-              className={`px-3 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1 ${role === "host" ? "bg-amber-500 text-slate-950 shadow" : "text-slate-400"}`}
+              className={`px-3 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1 cursor-pointer ${
+                role === "host"
+                  ? "bg-amber-500 text-slate-950 shadow"
+                  : "text-slate-400"
+              }`}
             >
               <Crown className="w-3.5 h-3.5" /> Host (ADM)
             </button>
             <button
               onClick={() => setRole("player")}
-              className={`px-3 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1 ${role === "player" ? "bg-blue-500 text-white shadow" : "text-slate-400"}`}
+              className={`px-3 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1 cursor-pointer ${
+                role === "player"
+                  ? "bg-blue-500 text-white shadow"
+                  : "text-slate-400"
+              }`}
             >
               <Users className="w-3.5 h-3.5" /> Jogador
             </button>
           </div>
 
-          {/* MUDAR JOGADOR ATIVO PARA TESTES */}
           <select
             value={activePlayerId}
             onChange={(e) => setActivePlayerId(e.target.value)}
-            className="bg-slate-800 text-white text-xs font-bold px-2 py-1.5 rounded-xl border border-slate-700 focus:outline-none"
+            className="bg-slate-800 text-white text-xs font-bold px-2 py-1.5 rounded-xl border border-slate-700 focus:outline-none cursor-pointer"
           >
             {players.map((p) => (
               <option key={p.id} value={p.id}>
@@ -1401,12 +1385,15 @@ export default function App() {
         </div>
       </header>
 
-      {/* PLACAR DOS JOGADORES NA PARTE SUPERIOR */}
       <div className="w-full max-w-6xl mx-auto mb-4 grid grid-cols-3 gap-3">
         {players.map((p) => (
           <div
             key={p.id}
-            className={`p-3 rounded-2xl bg-white/80 backdrop-blur-md border shadow-md flex items-center justify-between transition-all ${activePlayerId === p.id ? "ring-2 ring-blue-500 border-blue-400" : "border-white/60"}`}
+            className={`p-3 rounded-2xl bg-white/80 backdrop-blur-md border shadow-md flex items-center justify-between transition-all ${
+              activePlayerId === p.id
+                ? "ring-2 ring-blue-500 border-blue-400"
+                : "border-white/60"
+            }`}
           >
             <div className="flex items-center gap-2 overflow-hidden">
               <div className={`w-3 h-3 rounded-full ${p.color}`} />
@@ -1421,7 +1408,6 @@ export default function App() {
         ))}
       </div>
 
-      {/* CONTEÚDO PRINCIPAL DE ACORDO COM A ABA ATIVA */}
       <main className="w-full">
         {currentTab === "board" && renderBoardView()}
         {currentTab === "question" && renderQuestionView()}
