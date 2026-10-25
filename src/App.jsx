@@ -34,6 +34,9 @@ import {
   PenTool,
   Hash,
   UserPlus,
+  Lock,
+  Unlock,
+  KeyRound,
 } from "lucide-react";
 
 // --- GERADORES DE EFEITOS SONOROS (WEB AUDIO API) ---
@@ -80,7 +83,7 @@ const playSound = (type) => {
   }
 };
 
-// --- IMAGEM ILUSTRATIVA DO NARUTO NO PAINT (ESTILO CANVA MOCKUP) ---
+// --- IMAGEM ILUSTRATIVA DO NARUTO NO PAINT (MOCKUP CANVA) ---
 const NarutoPaintSVG = () => (
   <svg
     viewBox="0 0 400 400"
@@ -491,8 +494,15 @@ const RANDOM_EVENTS = [
 
 // --- COMPONENTE PRINCIPAL ---
 export default function App() {
+  // ESTADOS DE SEGURANÇA E PAPÉIS
+  const [role, setRole] = useState("player"); // Padrão: 'player' para segurança
+  const [isHostAuthenticated, setIsHostAuthenticated] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [passwordInput, setPasswordInput] = useState("");
+  const [authError, setAuthError] = useState("");
+  const hostPassword = "1234"; // 🔑 SENHA PADRÃO DO HOST (ADM)
+
   // ESTADOS DO JOGO
-  const [role, setRole] = useState("host"); // 'host' (ADM) ou 'player'
   const [quizData, setQuizData] = useState(INITIAL_QUIZ_DATA);
   const [hoveredCategory, setHoveredCategory] = useState(null);
 
@@ -519,10 +529,49 @@ export default function App() {
   const audioRef = useRef(null);
 
   // =========================================================
+  // 🔐 CONTROLE DE AUTENTICAÇÃO E PAPEL (HOST x JOGADOR)
+  // =========================================================
+
+  const handleRoleSwitch = (targetRole) => {
+    if (targetRole === "host") {
+      if (isHostAuthenticated) {
+        setRole("host");
+      } else {
+        setShowAuthModal(true);
+      }
+    } else {
+      setRole("player");
+      if (currentTab === "editor" || currentTab === "players") {
+        setCurrentTab("board");
+      }
+    }
+  };
+
+  const handleAuthSubmit = (e) => {
+    e.preventDefault();
+    if (passwordInput === hostPassword) {
+      setIsHostAuthenticated(true);
+      setRole("host");
+      setShowAuthModal(false);
+      setPasswordInput("");
+      setAuthError("");
+    } else {
+      setAuthError("Senha incorreta! Tente novamente.");
+    }
+  };
+
+  const handleLockHost = () => {
+    setIsHostAuthenticated(false);
+    setRole("player");
+    if (currentTab === "editor" || currentTab === "players") {
+      setCurrentTab("board");
+    }
+  };
+
+  // =========================================================
   // 📡 CONEXÃO EM TEMPO REAL COM FIREBASE (SINCRONIZAÇÃO TOTAL)
   // =========================================================
 
-  // 1. ESCUTAR A FILA DE BUZZ EM TEMPO REAL
   useEffect(() => {
     if (!database) return;
     const buzzRef = ref(database, "game/buzzQueue");
@@ -545,7 +594,6 @@ export default function App() {
     return () => unsubscribe();
   }, []);
 
-  // 2. ESCUTAR ESTADO DO JOGO EM TEMPO REAL (PERGUNTA ATIVA, PLACAR, TABULEIRO)
   useEffect(() => {
     if (!database) return;
     const stateRef = ref(database, "game/state");
@@ -566,7 +614,6 @@ export default function App() {
     return () => unsubscribe();
   }, []);
 
-  // 3. ENVIAR BUZZ PARA O FIREBASE
   const handleBuzzerClick = (pId) => {
     const playerObj = players.find((p) => p.id === pId);
     if (!playerObj) return;
@@ -600,7 +647,6 @@ export default function App() {
     }
   };
 
-  // 4. LIMPAR FILA DE BUZZ NO FIREBASE
   const handleClearBuzz = () => {
     setBuzzerQueue([]);
     if (database) {
@@ -609,7 +655,6 @@ export default function App() {
     }
   };
 
-  // 5. SELECIONAR PERGUNTA (HOST ATUALIZA TODAS AS TELAS)
   const handleSelectQuestion = (category, question) => {
     if (role === "player") return;
     const newQuestionState = { category, question };
@@ -625,7 +670,6 @@ export default function App() {
     }
   };
 
-  // 6. ALTERAR TABULADOR / ABAS
   const handleTabChange = (tab) => {
     setCurrentTab(tab);
     if (role === "host" && database) {
@@ -633,7 +677,6 @@ export default function App() {
     }
   };
 
-  // 7. ATRIBUIR PONTUAÇÃO (ACERTO / ERRO)
   const handleScoreAward = (isCorrect) => {
     if (!selectedQuestion || buzzerQueue.length === 0) return;
 
@@ -677,7 +720,6 @@ export default function App() {
     }
   };
 
-  // 8. SALVAR EDIÇÃO DO QUIZ
   const saveQuizDataLocally = (newQuizData) => {
     setQuizData(newQuizData);
     if (database) {
@@ -1289,6 +1331,71 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-300 via-indigo-200 to-purple-300 font-sans text-slate-800 p-3 sm:p-6 select-none relative overflow-x-hidden">
+      {/* MODAL DE AUTENTICAÇÃO DA SENHA DO HOST */}
+      {showAuthModal && (
+        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-slate-200 relative">
+            <button
+              onClick={() => {
+                setShowAuthModal(false);
+                setPasswordInput("");
+                setAuthError("");
+              }}
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-full cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto mb-3 border-2 border-amber-300">
+                <KeyRound className="w-8 h-8" />
+              </div>
+              <h3 className="text-2xl font-black text-slate-800">
+                Acesso do Host (ADM)
+              </h3>
+              <p className="text-xs text-slate-500 mt-1">
+                Digite a senha do administrador para comandar a partida.
+              </p>
+            </div>
+
+            <form onSubmit={handleAuthSubmit} className="space-y-4">
+              <div>
+                <input
+                  type="password"
+                  placeholder="Digite a senha (padrão: 1234)"
+                  value={passwordInput}
+                  onChange={(e) => setPasswordInput(e.target.value)}
+                  autoFocus
+                  className="w-full px-4 py-3 rounded-2xl border-2 border-slate-200 text-center font-bold text-xl tracking-widest focus:border-amber-500 focus:outline-none bg-slate-50"
+                />
+                {authError && (
+                  <p className="text-xs font-bold text-rose-500 text-center mt-2">
+                    {authError}
+                  </p>
+                )}
+              </div>
+
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowAuthModal(false)}
+                  className="flex-1 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 font-bold text-slate-600 text-sm transition-all cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 font-extrabold text-slate-950 text-sm shadow-md transition-all cursor-pointer"
+                >
+                  Entrar como Host
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* BARRA SUPERIOR DE NAVEGAÇÃO */}
       <header className="w-full max-w-6xl mx-auto mb-4 bg-slate-900/90 backdrop-blur-md rounded-2xl p-3 sm:p-4 text-white shadow-2xl flex flex-wrap items-center justify-between gap-4 border border-slate-700">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-xl bg-blue-600 text-white">
@@ -1304,6 +1411,7 @@ export default function App() {
           </div>
         </div>
 
+        {/* NAVEGAÇÃO DE ABAS (EDITOR E JOGADORES FICAM OCULTOS PARA PLAYER) */}
         <div className="flex items-center gap-1 bg-slate-800 p-1 rounded-xl text-xs font-bold">
           <button
             onClick={() => handleTabChange("board")}
@@ -1315,26 +1423,32 @@ export default function App() {
           >
             Tabuleiro
           </button>
-          <button
-            onClick={() => handleTabChange("editor")}
-            className={`px-3 py-2 rounded-lg transition-all cursor-pointer ${
-              currentTab === "editor"
-                ? "bg-blue-600 text-white shadow"
-                : "text-slate-400 hover:text-white"
-            }`}
-          >
-            Editor ADM
-          </button>
-          <button
-            onClick={() => handleTabChange("players")}
-            className={`px-3 py-2 rounded-lg transition-all cursor-pointer ${
-              currentTab === "players"
-                ? "bg-blue-600 text-white shadow"
-                : "text-slate-400 hover:text-white"
-            }`}
-          >
-            Jogadores
-          </button>
+
+          {role === "host" && (
+            <>
+              <button
+                onClick={() => handleTabChange("editor")}
+                className={`px-3 py-2 rounded-lg transition-all cursor-pointer ${
+                  currentTab === "editor"
+                    ? "bg-blue-600 text-white shadow"
+                    : "text-slate-400 hover:text-white"
+                }`}
+              >
+                Editor ADM
+              </button>
+              <button
+                onClick={() => handleTabChange("players")}
+                className={`px-3 py-2 rounded-lg transition-all cursor-pointer ${
+                  currentTab === "players"
+                    ? "bg-blue-600 text-white shadow"
+                    : "text-slate-400 hover:text-white"
+                }`}
+              >
+                Jogadores
+              </button>
+            </>
+          )}
+
           <button
             onClick={() => handleTabChange("minigames")}
             className={`px-3 py-2 rounded-lg transition-all cursor-pointer ${
@@ -1347,10 +1461,11 @@ export default function App() {
           </button>
         </div>
 
+        {/* SELECTOR DE PAPEL & CADEADO DE BLOQUEIO */}
         <div className="flex items-center gap-2">
           <div className="flex items-center bg-slate-800 rounded-xl p-1 text-xs">
             <button
-              onClick={() => setRole("host")}
+              onClick={() => handleRoleSwitch("host")}
               className={`px-3 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1 cursor-pointer ${
                 role === "host"
                   ? "bg-amber-500 text-slate-950 shadow"
@@ -1360,7 +1475,7 @@ export default function App() {
               <Crown className="w-3.5 h-3.5" /> Host (ADM)
             </button>
             <button
-              onClick={() => setRole("player")}
+              onClick={() => handleRoleSwitch("player")}
               className={`px-3 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1 cursor-pointer ${
                 role === "player"
                   ? "bg-blue-500 text-white shadow"
@@ -1371,6 +1486,18 @@ export default function App() {
             </button>
           </div>
 
+          {/* BOTÃO DE BLOQUEAR/SAIR DO MODO HOST */}
+          {isHostAuthenticated && (
+            <button
+              onClick={handleLockHost}
+              title="Sair do Modo Host (Bloquear ADM)"
+              className="p-2 rounded-xl bg-slate-800 hover:bg-rose-600 text-slate-300 hover:text-white transition-all cursor-pointer"
+            >
+              <Lock className="w-4 h-4" />
+            </button>
+          )}
+
+          {/* SELECTOR DO JOGADOR LOCAL */}
           <select
             value={activePlayerId}
             onChange={(e) => setActivePlayerId(e.target.value)}
@@ -1385,6 +1512,7 @@ export default function App() {
         </div>
       </header>
 
+      {/* PLACAR DOS JOGADORES NA PARTE SUPERIOR */}
       <div className="w-full max-w-6xl mx-auto mb-4 grid grid-cols-3 gap-3">
         {players.map((p) => (
           <div
