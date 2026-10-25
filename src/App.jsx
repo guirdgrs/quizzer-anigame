@@ -37,6 +37,10 @@ import {
   Lock,
   Unlock,
   KeyRound,
+  Video,
+  Sliders,
+  LayoutPosition,
+  Wand2,
 } from "lucide-react";
 
 // --- GERADORES DE EFEITOS SONOROS (WEB AUDIO API) ---
@@ -83,7 +87,7 @@ const playSound = (type) => {
   }
 };
 
-// --- IMAGEM ILUSTRATIVA DO NARUTO NO PAINT (MOCKUP CANVA) ---
+// --- IMAGEM ILUSTRATIVA DO NARUTO NO PAINT ---
 const NarutoPaintSVG = () => (
   <svg
     viewBox="0 0 400 400"
@@ -188,65 +192,83 @@ const NarutoPaintSVG = () => (
   </svg>
 );
 
-// --- DADOS INICIAIS DO QUIZ ---
+// --- DADOS INICIAIS DO QUIZ COM MÍDIAS E EFEITOS ---
 const INITIAL_QUIZ_DATA = {
-  title: "Animes",
+  title: "Animes & Jogos",
   categories: [
     {
       id: "picasso",
       name: "Picasso",
       description:
-        "Adivinhe qual é o personagem ou anime com base na arte conceitual de baixíssima qualidade desenhada no MS Paint!",
+        "Adivinhe o personagem com base na arte conceitual em baixíssima qualidade!",
       questions: [
         {
           level: 1,
           value: 100,
-          type: "image",
+          mediaType: "image",
           isCustomSvg: true,
           content: "Quem é esse ninja clássico do anime?",
           answer: "Naruto Uzumaki (Naruto Shippuden)",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "top",
         },
         {
           level: 2,
           value: 200,
-          type: "image",
+          mediaType: "image",
           imageUrl:
             "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500",
-          content: "Qual é esse lendário Sayajin?",
+          content: "Qual é esse lendário Sayajin? (Imagem borrada)",
           answer: "Goku / Son Goku (Dragon Ball Z)",
+          blurLevel: 12,
+          audioEffect: "none",
+          textPosition: "top",
         },
         {
           level: 3,
           value: 300,
-          type: "image",
+          mediaType: "image",
           imageUrl:
             "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=500",
           content: "Futuro Rei dos Piratas!",
           answer: "Monkey D. Luffy (One Piece)",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "bottom",
         },
         {
           level: 4,
           value: 400,
-          type: "text",
+          mediaType: "text",
           content:
             "Desenho minimalista: Rato amarelo com bochechas vermelhas que solta trovões.",
           answer: "Pikachu (Pokémon)",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "top",
         },
         {
           level: 5,
           value: 500,
-          type: "text",
+          mediaType: "text",
           content:
             "Desenho minimalista: Robô gigante bio-mecânico roxo e verde gritando descontrolado.",
           answer: "EVA-01 (Neon Genesis Evangelion)",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "top",
         },
         {
           level: 6,
           value: 600,
-          type: "text",
+          mediaType: "text",
           content:
             "Desenho minimalista: Um garoto com caderno preto sorrindo enquanto come batatas fritas.",
           answer: "Light Yagami / Kira (Death Note)",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "top",
         },
       ],
     },
@@ -254,52 +276,70 @@ const INITIAL_QUIZ_DATA = {
       id: "babel",
       name: "Babel",
       description:
-        "Desafios de áudio! Reconheça vozes, aberturas invertidas ou dublagens em outros idiomas.",
+        "Desafios de áudio! Reconheça vozes, aberturas invertidas ou aceleradas.",
       questions: [
         {
           level: 1,
           value: 100,
-          type: "audio",
+          mediaType: "audio",
           audioUrl:
             "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-          content: "Qual anime tem essa música tema icônica?",
+          content: "Qual anime tem essa música tema? (Acelerada 1.35x)",
           answer: "Attack on Titan (Shingeki no Kyojin)",
+          blurLevel: 0,
+          audioEffect: "fast",
+          textPosition: "top",
         },
         {
           level: 2,
           value: 200,
-          type: "text",
+          mediaType: "text",
           content:
             "Quem diz a frase famosa: 'O de cima sobe e o de baixo desce'?",
           answer: "Yusuke Urameshi (Yu Yu Hakusho)",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "top",
         },
         {
           level: 3,
           value: 300,
-          type: "text",
+          mediaType: "text",
           content: "Qual bordão pertence a este personagem: 'Dattebayo!'",
           answer: "Naruto Uzumaki",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "top",
         },
         {
           level: 4,
           value: 400,
-          type: "text",
+          mediaType: "text",
           content: "Qual dublador oficial dá a voz ao Goku no Brasil?",
           answer: "Wendel Bezerra",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "top",
         },
         {
           level: 5,
           value: 500,
-          type: "text",
+          mediaType: "text",
           content: "Identifique o jogo pela música da fase do vulcão/fogo.",
           answer: "Super Mario 64",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "top",
         },
         {
           level: 6,
           value: 600,
-          type: "text",
+          mediaType: "text",
           content: "Qual o idioma original da música 'Brave Heart' de Digimon?",
           answer: "Japonês",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "top",
         },
       ],
     },
@@ -307,162 +347,214 @@ const INITIAL_QUIZ_DATA = {
       id: "guilhotina",
       name: "Guilhotina",
       description:
-        "Perguntas de eliminação rápida e alto risco! Responda corretamente ou perderá pontos na hora.",
+        "Perguntas de eliminação rápida e alto risco!",
       questions: [
         {
           level: 1,
           value: 100,
-          type: "text",
+          mediaType: "text",
           content: "Qual o nome da espada de Ichigo Kurosaki em Bleach?",
           answer: "Zangetsu",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "top",
         },
         {
           level: 2,
           value: 200,
-          type: "text",
+          mediaType: "text",
           content: "Quantas Esferas do Dragão existem na Terra em Dragon Ball?",
           answer: "7 Esferas",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "top",
         },
         {
           level: 3,
           value: 300,
-          type: "text",
+          mediaType: "text",
           content: "Quem é o irmão mais velho de Sasuke Uchiha?",
           answer: "Itachi Uchiha",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "top",
         },
         {
           level: 4,
           value: 400,
-          type: "text",
+          mediaType: "text",
           content: "Qual é o objeto que concede poderes em JoJo Part 1?",
           answer: "A Máscara de Pedra",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "top",
         },
         {
           level: 5,
           value: 500,
-          type: "text",
+          mediaType: "text",
           content: "Qual o verdadeiro nome do L em Death Note?",
           answer: "L Lawliet",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "top",
         },
         {
           level: 6,
           value: 600,
-          type: "text",
+          mediaType: "text",
           content: "Qual a altura do Titã Colossal?",
           answer: "60 metros",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "top",
         },
       ],
     },
     {
       id: "erro",
       name: "Erro",
-      description:
-        "Encontre a gafe, o erro de animação ou o fato absurdamente falso na declaração apresentada!",
+      description: "Encontre a gafe ou o erro na declaração!",
       questions: [
         {
           level: 1,
           value: 100,
-          type: "text",
+          mediaType: "text",
           content:
             "Qual o ERRO nesta frase: 'Ash Ketchum venceu a Liga Indigo de Kanto com seu Charizard em sua primeira jornada.'",
           answer:
             "Erro: Ash PERDEU a Liga Kanto (ficou no Top 16 porque Charizard dormiu).",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "top",
         },
         {
           level: 2,
           value: 200,
-          type: "text",
+          mediaType: "text",
           content:
             "Qual o ERRO: 'Saitama de One Punch Man treinou fazendo 500 flexões por dia.'",
           answer:
             "Erro: O treino era de 100 flexões, 100 abdominais, 100 agachamentos e 10km de corrida.",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "top",
         },
         {
           level: 3,
           value: 300,
-          type: "text",
+          mediaType: "text",
           content:
             "Qual o ERRO: 'Em Naruto, Kakashi possui dois Sharingans durante toda a fase clássica.'",
           answer: "Erro: Ele possuía apenas UM Sharingan no olho esquerdo.",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "top",
         },
         {
           level: 4,
           value: 400,
-          type: "text",
+          mediaType: "text",
           content:
             "Qual o ERRO no jogo Zelda: 'Zelda usa uma túnica verde e uma espada mestre.'",
           answer: "Erro: O herói de túnica verde é o LINK, Zelda é a princesa.",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "top",
         },
         {
           level: 5,
           value: 500,
-          type: "text",
+          mediaType: "text",
           content: "Qual o ERRO: 'Demon Slayer se passa na Era Meiji.'",
           answer: "Erro: Se passa na Era Taisho.",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "top",
         },
         {
           level: 6,
           value: 600,
-          type: "text",
+          mediaType: "text",
           content:
             "Qual o ERRO: 'Hunter x Hunter foi escrito pelo criador de Naruto.'",
           answer:
             "Erro: Foi escrito por Yoshihiro Togashi (criador de Yu Yu Hakusho).",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "top",
         },
       ],
     },
     {
       id: "bangboo",
       name: "Bangboo",
-      description:
-        "Conhecimentos gerais sobre Zenless Zone Zero, Genshin Impact, Honkai e gachas atuais!",
+      description: "Conhecimentos gerais sobre gachas e RPGs!",
       questions: [
         {
           level: 1,
           value: 100,
-          type: "text",
+          mediaType: "text",
           content:
             "De qual jogo da HoYoverse são os mascotes redondinhos chamados 'Bangboo'?",
           answer: "Zenless Zone Zero (ZZZ)",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "top",
         },
         {
           level: 2,
           value: 200,
-          type: "text",
+          mediaType: "text",
           content: "Qual é o elemento do Arconte Venti em Genshin Impact?",
           answer: "Anemo (Vento)",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "top",
         },
         {
           level: 3,
           value: 300,
-          type: "text",
+          mediaType: "text",
           content:
             "Qual o nome da mascote/guia de emergência do Viajante em Genshin Impact?",
           answer: "Paimon",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "top",
         },
         {
           level: 4,
           value: 400,
-          type: "text",
+          mediaType: "text",
           content:
             "Em Honkai: Star Rail, qual o veículo usado para viajar entre as galáxias?",
           answer: "Astral Express (O Trem)",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "top",
         },
         {
           level: 5,
           value: 500,
-          type: "text",
+          mediaType: "text",
           content:
             "Qual a facção liderada por Nicole Demara em Zenless Zone Zero?",
           answer: "Gentle House (Cunning Hares)",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "top",
         },
         {
           level: 6,
           value: 600,
-          type: "text",
+          mediaType: "text",
           content:
             "Como é chamado o sistema de sorteio de personagens nos jogos gacha?",
           answer: "Banners / Tiros (Wishes / Pulls)",
+          blurLevel: 0,
+          audioEffect: "none",
+          textPosition: "top",
         },
       ],
     },
@@ -492,25 +584,30 @@ const RANDOM_EVENTS = [
   },
 ];
 
-// --- COMPONENTE PRINCIPAL ---
+// Helper para formatar links do YouTube em Embed
+const getYouTubeEmbedUrl = (url) => {
+  if (!url) return "";
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+  return match && match[2].length === 11
+    ? `https://www.youtube.com/embed/${match[2]}`
+    : url;
+};
+
 export default function App() {
-  // ESTADOS DE SEGURANÇA E PAPÉIS
-  const [role, setRole] = useState("player"); // Padrão: 'player' para segurança
+  const [role, setRole] = useState("player");
   const [isHostAuthenticated, setIsHostAuthenticated] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [passwordInput, setPasswordInput] = useState("");
   const [authError, setAuthError] = useState("");
-  const hostPassword = "1234"; // 🔑 SENHA PADRÃO DO HOST (ADM)
+  const hostPassword = "1234";
 
-  // ESTADOS DO JOGO
   const [quizData, setQuizData] = useState(INITIAL_QUIZ_DATA);
   const [hoveredCategory, setHoveredCategory] = useState(null);
 
-  // NAVEGAÇÃO
   const [currentTab, setCurrentTab] = useState("board");
   const [selectedQuestion, setSelectedQuestion] = useState(null);
 
-  // ESTADO DA PARTIDA
   const [players, setPlayers] = useState([
     { id: "p1", name: "OtakuMaster", score: 0, color: "bg-blue-500" },
     { id: "p2", name: "GamerPro", score: 0, color: "bg-purple-500" },
@@ -520,17 +617,22 @@ export default function App() {
   const [activePlayerId, setActivePlayerId] = useState("p1");
   const [completedQuestions, setCompletedQuestions] = useState({});
 
-  // MINIGAMES
   const [activeEvent, setActiveEvent] = useState(null);
 
-  // ESTADO DO BUZZER E RESPOSTAS
   const [buzzerQueue, setBuzzerQueue] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [hostRevealedBlur, setHostRevealedBlur] = useState(false); // Dica do Host: remover borrão ao vivo
   const audioRef = useRef(null);
 
-  // =========================================================
-  // 🔐 CONTROLE DE AUTENTICAÇÃO E PAPEL (HOST x JOGADOR)
-  // =========================================================
+  // Ajustar efeito de áudio (velocidade)
+  useEffect(() => {
+    if (audioRef.current && selectedQuestion?.question) {
+      const effect = selectedQuestion.question.audioEffect || "none";
+      if (effect === "fast") audioRef.current.playbackRate = 1.35;
+      else if (effect === "slow") audioRef.current.playbackRate = 0.75;
+      else audioRef.current.playbackRate = 1.0;
+    }
+  }, [selectedQuestion, currentTab]);
 
   const handleRoleSwitch = (targetRole) => {
     if (targetRole === "host") {
@@ -568,10 +670,7 @@ export default function App() {
     }
   };
 
-  // =========================================================
-  // 📡 CONEXÃO EM TEMPO REAL COM FIREBASE (SINCRONIZAÇÃO TOTAL)
-  // =========================================================
-
+  // --- FIREBASE SYNC ---
   useEffect(() => {
     if (!database) return;
     const buzzRef = ref(database, "game/buzzQueue");
@@ -579,18 +678,13 @@ export default function App() {
       const data = snapshot.val();
       if (data) {
         const list = Object.entries(data)
-          .map(([key, value]) => ({
-            id: key,
-            ...value,
-          }))
+          .map(([key, value]) => ({ id: key, ...value }))
           .sort((a, b) => a.timestamp - b.timestamp);
-
         setBuzzerQueue(list);
       } else {
         setBuzzerQueue([]);
       }
     });
-
     return () => unsubscribe();
   }, []);
 
@@ -604,20 +698,20 @@ export default function App() {
         if (data.selectedQuestion !== undefined)
           setSelectedQuestion(data.selectedQuestion);
         if (data.showAnswer !== undefined) setShowAnswer(data.showAnswer);
+        if (data.hostRevealedBlur !== undefined)
+          setHostRevealedBlur(data.hostRevealedBlur);
         if (data.completedQuestions !== undefined)
           setCompletedQuestions(data.completedQuestions);
         if (data.players !== undefined) setPlayers(data.players);
         if (data.quizData !== undefined) setQuizData(data.quizData);
       }
     });
-
     return () => unsubscribe();
   }, []);
 
   const handleBuzzerClick = (pId) => {
     const playerObj = players.find((p) => p.id === pId);
     if (!playerObj) return;
-
     if (buzzerQueue.some((item) => item.playerId === pId)) return;
 
     playSound("buzzer");
@@ -660,12 +754,14 @@ export default function App() {
     const newQuestionState = { category, question };
     setSelectedQuestion(newQuestionState);
     setShowAnswer(false);
+    setHostRevealedBlur(false);
     handleClearBuzz();
     setCurrentTab("question");
 
     if (database) {
       set(ref(database, "game/state/selectedQuestion"), newQuestionState);
       set(ref(database, "game/state/showAnswer"), false);
+      set(ref(database, "game/state/hostRevealedBlur"), false);
       set(ref(database, "game/state/currentTab"), "question");
     }
   };
@@ -688,7 +784,7 @@ export default function App() {
     if (isCorrect) {
       playSound("correct");
       updatedPlayers = updatedPlayers.map((p) =>
-        p.id === currentBuzz.playerId ? { ...p, score: p.score + points } : p,
+        p.id === currentBuzz.playerId ? { ...p, score: p.score + points } : p
       );
       const key = `${selectedQuestion.category.id}-${selectedQuestion.question.level}`;
       const updatedCompleted = { ...completedQuestions, [key]: true };
@@ -707,7 +803,7 @@ export default function App() {
       updatedPlayers = updatedPlayers.map((p) =>
         p.id === currentBuzz.playerId
           ? { ...p, score: Math.max(0, p.score - Math.floor(points / 2)) }
-          : p,
+          : p
       );
       setPlayers(updatedPlayers);
 
@@ -757,13 +853,13 @@ export default function App() {
 
   const handleUpdateScore = (id, delta) => {
     const updated = players.map((p) =>
-      p.id === id ? { ...p, score: Math.max(0, p.score + delta) } : p,
+      p.id === id ? { ...p, score: Math.max(0, p.score + delta) } : p
     );
     setPlayers(updated);
     if (database) set(ref(database, "game/state/players"), updated);
   };
 
-  // --- RENDERIZAR TABULEIRO ---
+  // --- TABULEIRO ---
   const renderBoardView = () => (
     <div className="w-full max-w-6xl mx-auto my-4 p-4 sm:p-8 rounded-3xl bg-white/70 backdrop-blur-xl border border-white/80 shadow-2xl transition-all">
       <div className="text-center mb-8">
@@ -828,8 +924,8 @@ export default function App() {
                       isCompleted
                         ? "bg-slate-300 text-slate-500 line-through opacity-60 hover:opacity-100"
                         : role === "player"
-                          ? "bg-gradient-to-b from-blue-400 to-blue-600 text-white cursor-default"
-                          : "bg-gradient-to-b from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white hover:scale-105 active:scale-95 shadow-blue-300/50 cursor-pointer"
+                        ? "bg-gradient-to-b from-blue-400 to-blue-600 text-white cursor-default"
+                        : "bg-gradient-to-b from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white hover:scale-105 active:scale-95 shadow-blue-300/50 cursor-pointer"
                     }`}
                   >
                     {isCompleted ? (
@@ -847,10 +943,25 @@ export default function App() {
     </div>
   );
 
-  // --- RENDERIZAR TELA DA PERGUNTA ---
+  // --- TELA DA PERGUNTA ---
   const renderQuestionView = () => {
     if (!selectedQuestion) return null;
     const { category, question } = selectedQuestion;
+
+    const blurPx = hostRevealedBlur ? 0 : question.blurLevel || 0;
+    const textPos = question.textPosition || "top";
+
+    const TextComponent = () => (
+      <p
+        className={`text-xl sm:text-2xl font-bold text-slate-800 text-center ${
+          textPos === "overlay"
+            ? "bg-slate-900/80 text-white p-4 rounded-2xl backdrop-blur-md shadow-lg my-2 max-w-xl mx-auto"
+            : "my-3"
+        }`}
+      >
+        {question.content}
+      </p>
+    );
 
     return (
       <div className="w-full max-w-5xl mx-auto my-4 p-4 sm:p-8 rounded-3xl bg-white/75 backdrop-blur-xl border border-white/90 shadow-2xl relative transition-all">
@@ -871,13 +982,17 @@ export default function App() {
           </div>
         </div>
 
+        {/* ÁREA DA PERGUNTA E MÍDIAS */}
         <div className="bg-white/90 rounded-2xl p-6 shadow-inner border border-slate-200 min-h-[320px] flex flex-col items-center justify-center my-4 relative overflow-hidden">
-          <p className="text-xl sm:text-2xl font-bold text-slate-800 text-center mb-4">
-            {question.content}
-          </p>
+          {/* TEXTO NA POSIÇÃO ACIMA */}
+          {(textPos === "top" || textPos === "overlay") && <TextComponent />}
 
-          {question.type === "image" && (
-            <div className="w-full max-w-md my-2 rounded-xl overflow-hidden border-2 border-slate-300 shadow-md bg-white p-2">
+          {/* MÍDIA: IMAGEM */}
+          {(question.mediaType === "image" || question.type === "image") && (
+            <div
+              className="w-full max-w-md my-2 rounded-xl overflow-hidden border-2 border-slate-300 shadow-md bg-white p-2 transition-all duration-500"
+              style={{ filter: blurPx > 0 ? `blur(${blurPx}px)` : "none" }}
+            >
               {question.isCustomSvg ? (
                 <NarutoPaintSVG />
               ) : (
@@ -893,11 +1008,41 @@ export default function App() {
             </div>
           )}
 
-          {question.type === "audio" && (
-            <div className="my-6 p-6 rounded-2xl bg-blue-50 border-2 border-blue-200 flex flex-col items-center gap-3 w-full max-w-md">
-              <Volume2 className="w-12 h-12 text-blue-600 animate-pulse" />
-              <p className="text-xs font-bold text-blue-800 uppercase">
-                Aperte o Play para ouvir a faixa misteriosa
+          {/* MÍDIA: VÍDEO */}
+          {question.mediaType === "video" && question.videoUrl && (
+            <div
+              className="w-full max-w-lg my-3 rounded-xl overflow-hidden border-2 border-slate-300 shadow-md bg-black transition-all duration-500"
+              style={{ filter: blurPx > 0 ? `blur(${blurPx}px)` : "none" }}
+            >
+              {question.videoUrl.includes("youtube") ||
+              question.videoUrl.includes("youtu.be") ? (
+                <iframe
+                  src={getYouTubeEmbedUrl(question.videoUrl)}
+                  title="Vídeo Quiz"
+                  className="w-full h-64 rounded-lg"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                <video
+                  src={question.videoUrl}
+                  controls
+                  className="w-full max-h-[320px] rounded-lg"
+                />
+              )}
+            </div>
+          )}
+
+          {/* MÍDIA: ÁUDIO */}
+          {(question.mediaType === "audio" || question.type === "audio") && (
+            <div className="my-4 p-5 rounded-2xl bg-blue-50 border-2 border-blue-200 flex flex-col items-center gap-2 w-full max-w-md shadow-sm">
+              <Volume2 className="w-10 h-10 text-blue-600 animate-pulse" />
+              <p className="text-xs font-extrabold text-blue-800 uppercase tracking-wider">
+                {question.audioEffect === "fast"
+                  ? "⚡ Áudio Acelerado (1.35x)"
+                  : question.audioEffect === "slow"
+                  ? "🐢 Áudio Desacelerado (0.75x)"
+                  : "🎵 Áudio da Pergunta"}
               </p>
               <audio
                 ref={audioRef}
@@ -906,11 +1051,31 @@ export default function App() {
                   "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
                 }
                 controls
-                className="w-full mt-2"
+                className="w-full mt-1"
               />
             </div>
           )}
 
+          {/* TEXTO NA POSIÇÃO ABAIXO */}
+          {textPos === "bottom" && <TextComponent />}
+
+          {/* DICA DO HOST PARA REMOVER BORRÃO AO VIVO */}
+          {role === "host" && question.blurLevel > 0 && (
+            <button
+              onClick={() => {
+                const nextVal = !hostRevealedBlur;
+                setHostRevealedBlur(nextVal);
+                if (database)
+                  set(ref(database, "game/state/hostRevealedBlur"), nextVal);
+              }}
+              className="mt-3 px-4 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs shadow transition-all flex items-center gap-1.5 cursor-pointer"
+            >
+              <Wand2 className="w-4 h-4" />
+              {hostRevealedBlur ? "Restaurar Borrão" : "Remover Borrão ao Vivo (Dica)"}
+            </button>
+          )}
+
+          {/* RESPOSTA REVELADA */}
           {showAnswer && (
             <div className="mt-4 p-4 rounded-xl bg-emerald-100 border-2 border-emerald-400 text-emerald-900 text-center w-full max-w-lg animate-fadeIn">
               <span className="text-xs font-black uppercase text-emerald-600 block">
@@ -926,7 +1091,8 @@ export default function App() {
             onClick={() => {
               const nextVal = !showAnswer;
               setShowAnswer(nextVal);
-              if (database) set(ref(database, "game/state/showAnswer"), nextVal);
+              if (database)
+                set(ref(database, "game/state/showAnswer"), nextVal);
             }}
             className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-lg shadow-lg hover:shadow-emerald-200 transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
@@ -960,7 +1126,6 @@ export default function App() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-            {/* BOTÃO DE BUZZ */}
             <div className="flex flex-col items-center justify-center p-4">
               <button
                 onClick={() => handleBuzzerClick(activePlayerId)}
@@ -978,7 +1143,6 @@ export default function App() {
               </p>
             </div>
 
-            {/* FILA DE RESPOSTA */}
             <div className="bg-slate-800/80 rounded-xl p-4 border border-slate-700">
               <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
                 Fila de Resposta ({buzzerQueue.length})
@@ -1043,7 +1207,7 @@ export default function App() {
     );
   };
 
-  // --- RENDERIZAR DASHBOARD NO-CODE (EDITOR ADM) ---
+  // --- DASHBOARD NO-CODE DO ADM ---
   const renderEditorView = () => (
     <div className="w-full max-w-5xl mx-auto my-4 p-6 sm:p-8 rounded-3xl bg-white/80 backdrop-blur-xl border border-white shadow-2xl">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-200">
@@ -1053,7 +1217,7 @@ export default function App() {
             Dashboard de Criação (No-Code)
           </h2>
           <p className="text-sm text-slate-500">
-            Crie, altere e personalize as categorias e perguntas!
+            Adicione Imagens, Áudios, Vídeos, Efeitos de Borrão e Posições de Texto!
           </p>
         </div>
 
@@ -1066,7 +1230,7 @@ export default function App() {
             downloadAnchor.setAttribute("href", dataStr);
             downloadAnchor.setAttribute(
               "download",
-              `quiz_${quizData.title.toLowerCase()}.json`,
+              `quiz_${quizData.title.toLowerCase()}.json`
             );
             document.body.appendChild(downloadAnchor);
             downloadAnchor.click();
@@ -1132,57 +1296,217 @@ export default function App() {
               </div>
             </div>
 
-            <div className="space-y-3 mt-4 pt-3 border-t border-slate-200">
+            {/* PERGUNTAS EXPANDIDAS COM CONTROLES DE MÍDIA */}
+            <div className="space-y-4 mt-4 pt-3 border-t border-slate-200">
               <h4 className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">
-                Perguntas e Respostas ({cat.questions.length})
+                Perguntas, Mídias e Efeitos ({cat.questions.length})
               </h4>
 
-              <div className="grid grid-cols-1 gap-3">
+              <div className="space-y-4">
                 {cat.questions.map((q, qIdx) => (
                   <div
                     key={q.level}
-                    className="p-3 rounded-xl bg-white border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs"
+                    className="p-4 rounded-2xl bg-white border border-slate-200 shadow-sm space-y-3"
                   >
-                    <div className="flex items-center gap-2">
-                      <span className="w-7 h-7 rounded-full bg-blue-100 text-blue-700 font-black flex items-center justify-center text-sm">
+                    {/* LINHA 1: NÍVEL, TIPO DE MÍDIA, ENUNCIADO E RESPOSTA */}
+                    <div className="flex flex-col md:flex-row items-start md:items-center gap-2 text-xs">
+                      <span className="w-8 h-8 rounded-full bg-blue-600 text-white font-black flex items-center justify-center text-sm shrink-0">
                         {q.level}
                       </span>
-                      <span className="font-bold text-slate-700">
-                        Valendo {q.value} pts
-                      </span>
+
+                      {/* SELETOR DE MÍDIA */}
+                      <select
+                        value={q.mediaType || "text"}
+                        onChange={(e) => {
+                          const updatedCat = [...quizData.categories];
+                          updatedCat[cIdx].questions[qIdx].mediaType =
+                            e.target.value;
+                          saveQuizDataLocally({
+                            ...quizData,
+                            categories: updatedCat,
+                          });
+                        }}
+                        className="bg-slate-100 font-bold text-slate-700 px-2 py-2 rounded-xl border border-slate-300 focus:outline-none"
+                      >
+                        <option value="text">📝 Somente Texto</option>
+                        <option value="image">🖼️ Imagem</option>
+                        <option value="audio">🎧 Áudio</option>
+                        <option value="video">🎬 Vídeo</option>
+                      </select>
+
+                      <input
+                        type="text"
+                        placeholder="Pergunta / Enunciado..."
+                        value={q.content}
+                        onChange={(e) => {
+                          const updatedCat = [...quizData.categories];
+                          updatedCat[cIdx].questions[qIdx].content =
+                            e.target.value;
+                          saveQuizDataLocally({
+                            ...quizData,
+                            categories: updatedCat,
+                          });
+                        }}
+                        className="flex-1 px-3 py-2 rounded-xl border border-slate-200 font-medium text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500 w-full"
+                      />
+
+                      <input
+                        type="text"
+                        placeholder="Resposta correta..."
+                        value={q.answer}
+                        onChange={(e) => {
+                          const updatedCat = [...quizData.categories];
+                          updatedCat[cIdx].questions[qIdx].answer =
+                            e.target.value;
+                          saveQuizDataLocally({
+                            ...quizData,
+                            categories: updatedCat,
+                          });
+                        }}
+                        className="w-full md:w-48 px-3 py-2 rounded-xl border border-slate-200 font-bold text-emerald-700 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                      />
                     </div>
 
-                    <input
-                      type="text"
-                      placeholder="Pergunta / Desafio..."
-                      value={q.content}
-                      onChange={(e) => {
-                        const updatedCat = [...quizData.categories];
-                        updatedCat[cIdx].questions[qIdx].content =
-                          e.target.value;
-                        saveQuizDataLocally({
-                          ...quizData,
-                          categories: updatedCat,
-                        });
-                      }}
-                      className="flex-1 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                    />
+                    {/* LINHA 2: CAMPOS DE MÍDIA (URLS E EFEITOS) */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-slate-100 text-xs">
+                      {/* URL DA MÍDIA */}
+                      <div className="sm:col-span-1">
+                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
+                          Link da Mídia (ou arquivo na pasta public)
+                        </label>
+                        {q.mediaType === "image" && (
+                          <input
+                            type="text"
+                            placeholder="URL da Imagem..."
+                            value={q.imageUrl || ""}
+                            onChange={(e) => {
+                              const updatedCat = [...quizData.categories];
+                              updatedCat[cIdx].questions[qIdx].imageUrl =
+                                e.target.value;
+                              saveQuizDataLocally({
+                                ...quizData,
+                                categories: updatedCat,
+                              });
+                            }}
+                            className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-slate-700 bg-slate-50"
+                          />
+                        )}
+                        {q.mediaType === "audio" && (
+                          <input
+                            type="text"
+                            placeholder="URL do Áudio (MP3)..."
+                            value={q.audioUrl || ""}
+                            onChange={(e) => {
+                              const updatedCat = [...quizData.categories];
+                              updatedCat[cIdx].questions[qIdx].audioUrl =
+                                e.target.value;
+                              saveQuizDataLocally({
+                                ...quizData,
+                                categories: updatedCat,
+                              });
+                            }}
+                            className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-slate-700 bg-slate-50"
+                          />
+                        )}
+                        {q.mediaType === "video" && (
+                          <input
+                            type="text"
+                            placeholder="URL do Vídeo (YouTube ou MP4)..."
+                            value={q.videoUrl || ""}
+                            onChange={(e) => {
+                              const updatedCat = [...quizData.categories];
+                              updatedCat[cIdx].questions[qIdx].videoUrl =
+                                e.target.value;
+                              saveQuizDataLocally({
+                                ...quizData,
+                                categories: updatedCat,
+                              });
+                            }}
+                            className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-slate-700 bg-slate-50"
+                          />
+                        )}
+                        {(!q.mediaType || q.mediaType === "text") && (
+                          <span className="text-slate-400 italic block py-1.5">
+                            Sem mídia anexa
+                          </span>
+                        )}
+                      </div>
 
-                    <input
-                      type="text"
-                      placeholder="Resposta..."
-                      value={q.answer}
-                      onChange={(e) => {
-                        const updatedCat = [...quizData.categories];
-                        updatedCat[cIdx].questions[qIdx].answer =
-                          e.target.value;
-                        saveQuizDataLocally({
-                          ...quizData,
-                          categories: updatedCat,
-                        });
-                      }}
-                      className="w-full sm:w-48 px-3 py-1.5 rounded-lg border border-slate-200 font-bold text-emerald-700 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-                    />
+                      {/* CONTROLE DE BORRÃO / EFEITO DE ÁUDIO */}
+                      <div>
+                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
+                          Efeito Especial de Dificuldade
+                        </label>
+                        {(q.mediaType === "image" || q.mediaType === "video") && (
+                          <select
+                            value={q.blurLevel || 0}
+                            onChange={(e) => {
+                              const updatedCat = [...quizData.categories];
+                              updatedCat[cIdx].questions[qIdx].blurLevel =
+                                Number(e.target.value);
+                              saveQuizDataLocally({
+                                ...quizData,
+                                categories: updatedCat,
+                              });
+                            }}
+                            className="w-full px-2 py-1.5 rounded-lg border border-slate-200 font-bold text-slate-700 bg-slate-50"
+                          >
+                            <option value={0}>✨ Imagem Limpa (0px)</option>
+                            <option value={6}>🔍 Borrão Leve (6px)</option>
+                            <option value={12}>🌫️ Borrão Médio (12px)</option>
+                            <option value={20}>🧩 Borrão Forte (20px)</option>
+                          </select>
+                        )}
+                        {q.mediaType === "audio" && (
+                          <select
+                            value={q.audioEffect || "none"}
+                            onChange={(e) => {
+                              const updatedCat = [...quizData.categories];
+                              updatedCat[cIdx].questions[qIdx].audioEffect =
+                                e.target.value;
+                              saveQuizDataLocally({
+                                ...quizData,
+                                categories: updatedCat,
+                              });
+                            }}
+                            className="w-full px-2 py-1.5 rounded-lg border border-slate-200 font-bold text-slate-700 bg-slate-50"
+                          >
+                            <option value="none">🎵 Áudio Normal</option>
+                            <option value="fast">⚡ Acelerado (1.35x)</option>
+                            <option value="slow">🐢 Desacelerado (0.75x)</option>
+                          </select>
+                        )}
+                        {(!q.mediaType || q.mediaType === "text") && (
+                          <span className="text-slate-400 italic block py-1.5">
+                            Nenhum efeito
+                          </span>
+                        )}
+                      </div>
+
+                      {/* POSIÇÃO DO TEXTO */}
+                      <div>
+                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
+                          Posição do Enunciado
+                        </label>
+                        <select
+                          value={q.textPosition || "top"}
+                          onChange={(e) => {
+                            const updatedCat = [...quizData.categories];
+                            updatedCat[cIdx].questions[qIdx].textPosition =
+                              e.target.value;
+                            saveQuizDataLocally({
+                              ...quizData,
+                              categories: updatedCat,
+                            });
+                          }}
+                          className="w-full px-2 py-1.5 rounded-lg border border-slate-200 font-bold text-slate-700 bg-slate-50"
+                        >
+                          <option value="top">⬆️ Texto Acima da Mídia</option>
+                          <option value="bottom">⬇️ Texto Abaixo da Mídia</option>
+                          <option value="overlay">🏷️ Legenda Flutuante (Overlay)</option>
+                        </select>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -1193,7 +1517,7 @@ export default function App() {
     </div>
   );
 
-  // --- RENDERIZAR GERENCIADOR DE JOGADORES ---
+  // --- GERENCIADOR DE JOGADORES ---
   const renderPlayersView = () => (
     <div className="w-full max-w-4xl mx-auto my-4 p-6 sm:p-8 rounded-3xl bg-white/80 backdrop-blur-xl border border-white shadow-2xl">
       <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-200">
@@ -1269,7 +1593,7 @@ export default function App() {
     </div>
   );
 
-  // --- RENDERIZAR MINIGAMES ---
+  // --- MINIGAMES ---
   const renderMinigamesView = () => (
     <div className="w-full max-w-4xl mx-auto my-4 p-6 sm:p-8 rounded-3xl bg-white/80 backdrop-blur-xl border border-white shadow-2xl text-center">
       <Sparkles className="w-12 h-12 text-amber-500 mx-auto mb-3 animate-spin" />
@@ -1411,7 +1735,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* NAVEGAÇÃO DE ABAS (EDITOR E JOGADORES FICAM OCULTOS PARA PLAYER) */}
         <div className="flex items-center gap-1 bg-slate-800 p-1 rounded-xl text-xs font-bold">
           <button
             onClick={() => handleTabChange("board")}
@@ -1461,7 +1784,6 @@ export default function App() {
           </button>
         </div>
 
-        {/* SELECTOR DE PAPEL & CADEADO DE BLOQUEIO */}
         <div className="flex items-center gap-2">
           <div className="flex items-center bg-slate-800 rounded-xl p-1 text-xs">
             <button
@@ -1486,18 +1808,16 @@ export default function App() {
             </button>
           </div>
 
-          {/* BOTÃO DE BLOQUEAR/SAIR DO MODO HOST */}
           {isHostAuthenticated && (
             <button
               onClick={handleLockHost}
-              title="Sair do Modo Host (Bloquear ADM)"
+              title="Sair do Modo Host"
               className="p-2 rounded-xl bg-slate-800 hover:bg-rose-600 text-slate-300 hover:text-white transition-all cursor-pointer"
             >
               <Lock className="w-4 h-4" />
             </button>
           )}
 
-          {/* SELECTOR DO JOGADOR LOCAL */}
           <select
             value={activePlayerId}
             onChange={(e) => setActivePlayerId(e.target.value)}
@@ -1512,7 +1832,7 @@ export default function App() {
         </div>
       </header>
 
-      {/* PLACAR DOS JOGADORES NA PARTE SUPERIOR */}
+      {/* PLACAR DOS JOGADORES */}
       <div className="w-full max-w-6xl mx-auto mb-4 grid grid-cols-3 gap-3">
         {players.map((p) => (
           <div
