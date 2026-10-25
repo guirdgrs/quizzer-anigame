@@ -39,7 +39,7 @@ import {
   KeyRound,
   Video,
   Sliders,
-  LayoutPosition,
+  PanelsTopLeft,
   Wand2,
 } from "lucide-react";
 
