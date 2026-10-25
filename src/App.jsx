@@ -38,9 +38,9 @@ import {
   Unlock,
   KeyRound,
   Video,
-  Sliders,
-  PanelsTopLeft,
   Wand2,
+  UploadCloud,
+  FileUp,
 } from "lucide-react";
 
 // --- GERADORES DE EFEITOS SONOROS (WEB AUDIO API) ---
@@ -192,7 +192,7 @@ const NarutoPaintSVG = () => (
   </svg>
 );
 
-// --- DADOS INICIAIS DO QUIZ COM MÍDIAS E EFEITOS ---
+// --- DADOS INICIAIS DO QUIZ ---
 const INITIAL_QUIZ_DATA = {
   title: "Animes & Jogos",
   categories: [
@@ -211,7 +211,6 @@ const INITIAL_QUIZ_DATA = {
           answer: "Naruto Uzumaki (Naruto Shippuden)",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "top",
         },
         {
           level: 2,
@@ -223,7 +222,6 @@ const INITIAL_QUIZ_DATA = {
           answer: "Goku / Son Goku (Dragon Ball Z)",
           blurLevel: 12,
           audioEffect: "none",
-          textPosition: "top",
         },
         {
           level: 3,
@@ -235,7 +233,6 @@ const INITIAL_QUIZ_DATA = {
           answer: "Monkey D. Luffy (One Piece)",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "bottom",
         },
         {
           level: 4,
@@ -246,7 +243,6 @@ const INITIAL_QUIZ_DATA = {
           answer: "Pikachu (Pokémon)",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "top",
         },
         {
           level: 5,
@@ -257,7 +253,6 @@ const INITIAL_QUIZ_DATA = {
           answer: "EVA-01 (Neon Genesis Evangelion)",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "top",
         },
         {
           level: 6,
@@ -268,7 +263,6 @@ const INITIAL_QUIZ_DATA = {
           answer: "Light Yagami / Kira (Death Note)",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "top",
         },
       ],
     },
@@ -288,7 +282,6 @@ const INITIAL_QUIZ_DATA = {
           answer: "Attack on Titan (Shingeki no Kyojin)",
           blurLevel: 0,
           audioEffect: "fast",
-          textPosition: "top",
         },
         {
           level: 2,
@@ -299,7 +292,6 @@ const INITIAL_QUIZ_DATA = {
           answer: "Yusuke Urameshi (Yu Yu Hakusho)",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "top",
         },
         {
           level: 3,
@@ -309,7 +301,6 @@ const INITIAL_QUIZ_DATA = {
           answer: "Naruto Uzumaki",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "top",
         },
         {
           level: 4,
@@ -319,7 +310,6 @@ const INITIAL_QUIZ_DATA = {
           answer: "Wendel Bezerra",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "top",
         },
         {
           level: 5,
@@ -329,7 +319,6 @@ const INITIAL_QUIZ_DATA = {
           answer: "Super Mario 64",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "top",
         },
         {
           level: 6,
@@ -339,15 +328,13 @@ const INITIAL_QUIZ_DATA = {
           answer: "Japonês",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "top",
         },
       ],
     },
     {
       id: "guilhotina",
       name: "Guilhotina",
-      description:
-        "Perguntas de eliminação rápida e alto risco!",
+      description: "Perguntas de eliminação rápida e alto risco!",
       questions: [
         {
           level: 1,
@@ -357,7 +344,6 @@ const INITIAL_QUIZ_DATA = {
           answer: "Zangetsu",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "top",
         },
         {
           level: 2,
@@ -367,7 +353,6 @@ const INITIAL_QUIZ_DATA = {
           answer: "7 Esferas",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "top",
         },
         {
           level: 3,
@@ -377,7 +362,6 @@ const INITIAL_QUIZ_DATA = {
           answer: "Itachi Uchiha",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "top",
         },
         {
           level: 4,
@@ -387,7 +371,6 @@ const INITIAL_QUIZ_DATA = {
           answer: "A Máscara de Pedra",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "top",
         },
         {
           level: 5,
@@ -397,7 +380,6 @@ const INITIAL_QUIZ_DATA = {
           answer: "L Lawliet",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "top",
         },
         {
           level: 6,
@@ -407,7 +389,6 @@ const INITIAL_QUIZ_DATA = {
           answer: "60 metros",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "top",
         },
       ],
     },
@@ -426,7 +407,6 @@ const INITIAL_QUIZ_DATA = {
             "Erro: Ash PERDEU a Liga Kanto (ficou no Top 16 porque Charizard dormiu).",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "top",
         },
         {
           level: 2,
@@ -438,7 +418,6 @@ const INITIAL_QUIZ_DATA = {
             "Erro: O treino era de 100 flexões, 100 abdominais, 100 agachamentos e 10km de corrida.",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "top",
         },
         {
           level: 3,
@@ -449,7 +428,6 @@ const INITIAL_QUIZ_DATA = {
           answer: "Erro: Ele possuía apenas UM Sharingan no olho esquerdo.",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "top",
         },
         {
           level: 4,
@@ -460,7 +438,6 @@ const INITIAL_QUIZ_DATA = {
           answer: "Erro: O herói de túnica verde é o LINK, Zelda é a princesa.",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "top",
         },
         {
           level: 5,
@@ -470,7 +447,6 @@ const INITIAL_QUIZ_DATA = {
           answer: "Erro: Se passa na Era Taisho.",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "top",
         },
         {
           level: 6,
@@ -482,7 +458,6 @@ const INITIAL_QUIZ_DATA = {
             "Erro: Foi escrito por Yoshihiro Togashi (criador de Yu Yu Hakusho).",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "top",
         },
       ],
     },
@@ -500,7 +475,6 @@ const INITIAL_QUIZ_DATA = {
           answer: "Zenless Zone Zero (ZZZ)",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "top",
         },
         {
           level: 2,
@@ -510,7 +484,6 @@ const INITIAL_QUIZ_DATA = {
           answer: "Anemo (Vento)",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "top",
         },
         {
           level: 3,
@@ -521,7 +494,6 @@ const INITIAL_QUIZ_DATA = {
           answer: "Paimon",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "top",
         },
         {
           level: 4,
@@ -532,7 +504,6 @@ const INITIAL_QUIZ_DATA = {
           answer: "Astral Express (O Trem)",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "top",
         },
         {
           level: 5,
@@ -543,7 +514,6 @@ const INITIAL_QUIZ_DATA = {
           answer: "Gentle House (Cunning Hares)",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "top",
         },
         {
           level: 6,
@@ -554,7 +524,6 @@ const INITIAL_QUIZ_DATA = {
           answer: "Banners / Tiros (Wishes / Pulls)",
           blurLevel: 0,
           audioEffect: "none",
-          textPosition: "top",
         },
       ],
     },
@@ -584,7 +553,6 @@ const RANDOM_EVENTS = [
   },
 ];
 
-// Helper para formatar links do YouTube em Embed
 const getYouTubeEmbedUrl = (url) => {
   if (!url) return "";
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -592,6 +560,70 @@ const getYouTubeEmbedUrl = (url) => {
   return match && match[2].length === 11
     ? `https://www.youtube.com/embed/${match[2]}`
     : url;
+};
+
+// --- COMPONENTE REUTILIZÁVEL DE DROPZONE (DRAG AND DROP) ---
+const FileDropZone = ({ onFileLoaded, currentUrl, mediaType }) => {
+  const [isDragging, setIsDragging] = useState(false);
+
+  const processFile = (file) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      onFileLoaded(e.target.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      processFile(e.dataTransfer.files[0]);
+    }
+  };
+
+  return (
+    <div
+      onDragOver={(e) => {
+        e.preventDefault();
+        setIsDragging(true);
+      }}
+      onDragLeave={() => setIsDragging(false)}
+      onDrop={handleDrop}
+      className={`relative border-2 border-dashed rounded-xl p-3 text-center transition-all cursor-pointer ${
+        isDragging
+          ? "border-blue-500 bg-blue-50 scale-102"
+          : currentUrl
+          ? "border-emerald-300 bg-emerald-50/50"
+          : "border-slate-300 bg-slate-50 hover:bg-slate-100"
+      }`}
+    >
+      <input
+        type="file"
+        accept={
+          mediaType === "image"
+            ? "image/*"
+            : mediaType === "audio"
+            ? "audio/*"
+            : "video/*"
+        }
+        onChange={(e) => processFile(e.target.files[0])}
+        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+      />
+      <div className="flex flex-col items-center justify-center gap-1 text-slate-500">
+        <UploadCloud className="w-5 h-5 text-blue-500 animate-bounce" />
+        <p className="text-[11px] font-bold text-slate-700">
+          {currentUrl
+            ? "✅ Arquivo Carregado! (Arraste outro para trocar)"
+            : "Arraste o arquivo aqui ou clique para selecionar"}
+        </p>
+        <p className="text-[9px] text-slate-400">
+          Suporta imagens, áudios MP3 e vídeos MP4 do seu PC
+        </p>
+      </div>
+    </div>
+  );
 };
 
 export default function App() {
@@ -621,10 +653,9 @@ export default function App() {
 
   const [buzzerQueue, setBuzzerQueue] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false);
-  const [hostRevealedBlur, setHostRevealedBlur] = useState(false); // Dica do Host: remover borrão ao vivo
+  const [hostRevealedBlur, setHostRevealedBlur] = useState(false);
   const audioRef = useRef(null);
 
-  // Ajustar efeito de áudio (velocidade)
   useEffect(() => {
     if (audioRef.current && selectedQuestion?.question) {
       const effect = selectedQuestion.question.audioEffect || "none";
@@ -943,25 +974,11 @@ export default function App() {
     </div>
   );
 
-  // --- TELA DA PERGUNTA ---
+  // --- TELA DA PERGUNTA (ENUNCIADO ESTÁTICO ACIMA DA MÍDIA) ---
   const renderQuestionView = () => {
     if (!selectedQuestion) return null;
     const { category, question } = selectedQuestion;
-
     const blurPx = hostRevealedBlur ? 0 : question.blurLevel || 0;
-    const textPos = question.textPosition || "top";
-
-    const TextComponent = () => (
-      <p
-        className={`text-xl sm:text-2xl font-bold text-slate-800 text-center ${
-          textPos === "overlay"
-            ? "bg-slate-900/80 text-white p-4 rounded-2xl backdrop-blur-md shadow-lg my-2 max-w-xl mx-auto"
-            : "my-3"
-        }`}
-      >
-        {question.content}
-      </p>
-    );
 
     return (
       <div className="w-full max-w-5xl mx-auto my-4 p-4 sm:p-8 rounded-3xl bg-white/75 backdrop-blur-xl border border-white/90 shadow-2xl relative transition-all">
@@ -984,8 +1001,10 @@ export default function App() {
 
         {/* ÁREA DA PERGUNTA E MÍDIAS */}
         <div className="bg-white/90 rounded-2xl p-6 shadow-inner border border-slate-200 min-h-[320px] flex flex-col items-center justify-center my-4 relative overflow-hidden">
-          {/* TEXTO NA POSIÇÃO ACIMA */}
-          {(textPos === "top" || textPos === "overlay") && <TextComponent />}
+          {/* ENUNCIADO ESTÁTICO NO TOPO */}
+          <p className="text-xl sm:text-2xl font-bold text-slate-800 text-center mb-4">
+            {question.content}
+          </p>
 
           {/* MÍDIA: IMAGEM */}
           {(question.mediaType === "image" || question.type === "image") && (
@@ -1056,9 +1075,6 @@ export default function App() {
             </div>
           )}
 
-          {/* TEXTO NA POSIÇÃO ABAIXO */}
-          {textPos === "bottom" && <TextComponent />}
-
           {/* DICA DO HOST PARA REMOVER BORRÃO AO VIVO */}
           {role === "host" && question.blurLevel > 0 && (
             <button
@@ -1071,7 +1087,9 @@ export default function App() {
               className="mt-3 px-4 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs shadow transition-all flex items-center gap-1.5 cursor-pointer"
             >
               <Wand2 className="w-4 h-4" />
-              {hostRevealedBlur ? "Restaurar Borrão" : "Remover Borrão ao Vivo (Dica)"}
+              {hostRevealedBlur
+                ? "Restaurar Borrão"
+                : "Remover Borrão ao Vivo (Dica)"}
             </button>
           )}
 
@@ -1207,7 +1225,7 @@ export default function App() {
     );
   };
 
-  // --- DASHBOARD NO-CODE DO ADM ---
+  // --- DASHBOARD NO-CODE COM DRAG AND DROP ---
   const renderEditorView = () => (
     <div className="w-full max-w-5xl mx-auto my-4 p-6 sm:p-8 rounded-3xl bg-white/80 backdrop-blur-xl border border-white shadow-2xl">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-200">
@@ -1217,7 +1235,7 @@ export default function App() {
             Dashboard de Criação (No-Code)
           </h2>
           <p className="text-sm text-slate-500">
-            Adicione Imagens, Áudios, Vídeos, Efeitos de Borrão e Posições de Texto!
+            Arraste e solte seus arquivos de mídia do PC ou cole links da internet!
           </p>
         </div>
 
@@ -1296,10 +1314,10 @@ export default function App() {
               </div>
             </div>
 
-            {/* PERGUNTAS EXPANDIDAS COM CONTROLES DE MÍDIA */}
+            {/* PERGUNTAS EXPANDIDAS COM DRAG AND DROP */}
             <div className="space-y-4 mt-4 pt-3 border-t border-slate-200">
               <h4 className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">
-                Perguntas, Mídias e Efeitos ({cat.questions.length})
+                Perguntas e Arquivos de Mídia ({cat.questions.length})
               </h4>
 
               <div className="space-y-4">
@@ -1314,7 +1332,6 @@ export default function App() {
                         {q.level}
                       </span>
 
-                      {/* SELETOR DE MÍDIA */}
                       <select
                         value={q.mediaType || "text"}
                         onChange={(e) => {
@@ -1367,146 +1384,95 @@ export default function App() {
                       />
                     </div>
 
-                    {/* LINHA 2: CAMPOS DE MÍDIA (URLS E EFEITOS) */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-slate-100 text-xs">
-                      {/* URL DA MÍDIA */}
-                      <div className="sm:col-span-1">
-                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
-                          Link da Mídia (ou arquivo na pasta public)
-                        </label>
-                        {q.mediaType === "image" && (
-                          <input
-                            type="text"
-                            placeholder="URL da Imagem..."
-                            value={q.imageUrl || ""}
-                            onChange={(e) => {
+                    {/* LINHA 2: UPLOAD DE ARQUIVOS (DRAG & DROP) E EFEITOS */}
+                    {q.mediaType && q.mediaType !== "text" && (
+                      <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 pt-2 border-t border-slate-100 text-xs items-center">
+                        {/* ZONA DE ARRASTAR E SOLTAR ARQUIVOS */}
+                        <div className="sm:col-span-8">
+                          <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
+                            Upload de Arquivo (Arrastar & Soltar do PC)
+                          </label>
+                          <FileDropZone
+                            mediaType={q.mediaType}
+                            currentUrl={
+                              q.mediaType === "image"
+                                ? q.imageUrl
+                                : q.mediaType === "audio"
+                                ? q.audioUrl
+                                : q.videoUrl
+                            }
+                            onFileLoaded={(base64Data) => {
                               const updatedCat = [...quizData.categories];
-                              updatedCat[cIdx].questions[qIdx].imageUrl =
-                                e.target.value;
-                              saveQuizDataLocally({
-                                ...quizData,
-                                categories: updatedCat,
-                              });
-                            }}
-                            className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-slate-700 bg-slate-50"
-                          />
-                        )}
-                        {q.mediaType === "audio" && (
-                          <input
-                            type="text"
-                            placeholder="URL do Áudio (MP3)..."
-                            value={q.audioUrl || ""}
-                            onChange={(e) => {
-                              const updatedCat = [...quizData.categories];
-                              updatedCat[cIdx].questions[qIdx].audioUrl =
-                                e.target.value;
-                              saveQuizDataLocally({
-                                ...quizData,
-                                categories: updatedCat,
-                              });
-                            }}
-                            className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-slate-700 bg-slate-50"
-                          />
-                        )}
-                        {q.mediaType === "video" && (
-                          <input
-                            type="text"
-                            placeholder="URL do Vídeo (YouTube ou MP4)..."
-                            value={q.videoUrl || ""}
-                            onChange={(e) => {
-                              const updatedCat = [...quizData.categories];
-                              updatedCat[cIdx].questions[qIdx].videoUrl =
-                                e.target.value;
-                              saveQuizDataLocally({
-                                ...quizData,
-                                categories: updatedCat,
-                              });
-                            }}
-                            className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-slate-700 bg-slate-50"
-                          />
-                        )}
-                        {(!q.mediaType || q.mediaType === "text") && (
-                          <span className="text-slate-400 italic block py-1.5">
-                            Sem mídia anexa
-                          </span>
-                        )}
-                      </div>
+                              if (q.mediaType === "image")
+                                updatedCat[cIdx].questions[qIdx].imageUrl =
+                                  base64Data;
+                              else if (q.mediaType === "audio")
+                                updatedCat[cIdx].questions[qIdx].audioUrl =
+                                  base64Data;
+                              else if (q.mediaType === "video")
+                                updatedCat[cIdx].questions[qIdx].videoUrl =
+                                  base64Data;
 
-                      {/* CONTROLE DE BORRÃO / EFEITO DE ÁUDIO */}
-                      <div>
-                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
-                          Efeito Especial de Dificuldade
-                        </label>
-                        {(q.mediaType === "image" || q.mediaType === "video") && (
-                          <select
-                            value={q.blurLevel || 0}
-                            onChange={(e) => {
-                              const updatedCat = [...quizData.categories];
-                              updatedCat[cIdx].questions[qIdx].blurLevel =
-                                Number(e.target.value);
                               saveQuizDataLocally({
                                 ...quizData,
                                 categories: updatedCat,
                               });
                             }}
-                            className="w-full px-2 py-1.5 rounded-lg border border-slate-200 font-bold text-slate-700 bg-slate-50"
-                          >
-                            <option value={0}>✨ Imagem Limpa (0px)</option>
-                            <option value={6}>🔍 Borrão Leve (6px)</option>
-                            <option value={12}>🌫️ Borrão Médio (12px)</option>
-                            <option value={20}>🧩 Borrão Forte (20px)</option>
-                          </select>
-                        )}
-                        {q.mediaType === "audio" && (
-                          <select
-                            value={q.audioEffect || "none"}
-                            onChange={(e) => {
-                              const updatedCat = [...quizData.categories];
-                              updatedCat[cIdx].questions[qIdx].audioEffect =
-                                e.target.value;
-                              saveQuizDataLocally({
-                                ...quizData,
-                                categories: updatedCat,
-                              });
-                            }}
-                            className="w-full px-2 py-1.5 rounded-lg border border-slate-200 font-bold text-slate-700 bg-slate-50"
-                          >
-                            <option value="none">🎵 Áudio Normal</option>
-                            <option value="fast">⚡ Acelerado (1.35x)</option>
-                            <option value="slow">🐢 Desacelerado (0.75x)</option>
-                          </select>
-                        )}
-                        {(!q.mediaType || q.mediaType === "text") && (
-                          <span className="text-slate-400 italic block py-1.5">
-                            Nenhum efeito
-                          </span>
-                        )}
-                      </div>
+                          />
+                        </div>
 
-                      {/* POSIÇÃO DO TEXTO */}
-                      <div>
-                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
-                          Posição do Enunciado
-                        </label>
-                        <select
-                          value={q.textPosition || "top"}
-                          onChange={(e) => {
-                            const updatedCat = [...quizData.categories];
-                            updatedCat[cIdx].questions[qIdx].textPosition =
-                              e.target.value;
-                            saveQuizDataLocally({
-                              ...quizData,
-                              categories: updatedCat,
-                            });
-                          }}
-                          className="w-full px-2 py-1.5 rounded-lg border border-slate-200 font-bold text-slate-700 bg-slate-50"
-                        >
-                          <option value="top">⬆️ Texto Acima da Mídia</option>
-                          <option value="bottom">⬇️ Texto Abaixo da Mídia</option>
-                          <option value="overlay">🏷️ Legenda Flutuante (Overlay)</option>
-                        </select>
+                        {/* CONTROLE DE EFEITO ESPECIAL */}
+                        <div className="sm:col-span-4">
+                          <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
+                            Efeito de Dificuldade
+                          </label>
+                          {(q.mediaType === "image" ||
+                            q.mediaType === "video") && (
+                            <select
+                              value={q.blurLevel || 0}
+                              onChange={(e) => {
+                                const updatedCat = [...quizData.categories];
+                                updatedCat[cIdx].questions[qIdx].blurLevel =
+                                  Number(e.target.value);
+                                saveQuizDataLocally({
+                                  ...quizData,
+                                  categories: updatedCat,
+                                });
+                              }}
+                              className="w-full px-2 py-2 rounded-xl border border-slate-200 font-bold text-slate-700 bg-slate-50"
+                            >
+                              <option value={0}>✨ Sem Borrão</option>
+                              <option value={6}>🔍 Borrão Leve (6px)</option>
+                              <option value={12}>🌫️ Borrão Médio (12px)</option>
+                              <option value={20}>🧩 Borrão Forte (20px)</option>
+                            </select>
+                          )}
+                          {q.mediaType === "audio" && (
+                            <select
+                              value={q.audioEffect || "none"}
+                              onChange={(e) => {
+                                const updatedCat = [...quizData.categories];
+                                updatedCat[cIdx].questions[qIdx].audioEffect =
+                                  e.target.value;
+                                saveQuizDataLocally({
+                                  ...quizData,
+                                  categories: updatedCat,
+                                });
+                              }}
+                              className="w-full px-2 py-2 rounded-xl border border-slate-200 font-bold text-slate-700 bg-slate-50"
+                            >
+                              <option value="none">🎵 Áudio Normal</option>
+                              <option value="fast">
+                                ⚡ Acelerado (1.35x)
+                              </option>
+                              <option value="slow">
+                                🐢 Desacelerado (0.75x)
+                              </option>
+                            </select>
+                          )}
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 ))}
               </div>
